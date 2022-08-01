@@ -3,42 +3,30 @@ name: Python Binding
 on: [push, pull_request]
 
 jobs:
-  build: # Workflow credit to https://github.com/samuelcolvin/rtoml/blob/main/.github/workflows/ci.yml
-    name: >
-      build ${{ matrix.python-version }} on ${{ matrix.platform || matrix.os }}
-      (${{ matrix.alt_arch_name || matrix.arch }})
+  build:
+    name: building on ${{ matrix.os }} (${{ matrix.arch }})
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu, macos, windows]
-        python-version: ['cp37', 'cp38', 'cp39', 'cp310', 'pp37', 'pp38', 'pp39']
-        arch: [main, alt]
         include:
-          - os: ubuntu
-            platform: linux
-          - os: windows
+          - arch: auto64
+            os: ubuntu
+          - arch: auto32
+            os: ubuntu
+          - arch: aarch64
+            os: ubuntu
+          - arch: auto
+            os: macos
+          - arch: arm64
+            os: macos
+          - arch: universal2
+            os: macos
+          - arch: auto64
+            os: windows
             ls: dir
-          - os: ubuntu
-            arch: alt
-            alt_arch_name: 'aarch64'
-          - os: macos
-            arch: alt
-            alt_arch_name: 'arm64 universal2'
-        exclude:
-          - os: macos
-            python-version: 'cp37'
-            arch: alt
-          - os: windows
-            arch: alt
-          - os: macos
-            python-version: 'pp37'
-            arch: alt
-          - os: macos
-            python-version: 'pp38'
-            arch: alt
-          - os: macos
-            python-version: 'pp39'
-            arch: alt
+          - arch: auto32
+            os: windows
+            ls: dir
 
     runs-on: ${{ format('{0}-latest', matrix.os) }}
     steps:
@@ -68,26 +56,18 @@ jobs:
     - name: install python dependencies
       run: pip install -U setuptools wheel twine cibuildwheel
 
-    - name: build sdist
-      if: matrix.os == 'ubuntu' && matrix.python-version == '8'
-      run: |
-        pip install -U setuptools-rust
-        python setup.py sdist -d wheelhouse
-
     - name: Set up QEMU
       if: matrix.os == 'ubuntu'
       uses: docker/setup-qemu-action@v1
       with:
         platforms: all
 
-    - name: build ${{ matrix.platform || matrix.os }} binaries
+    - name: build ${{ matrix.os }} binaries
       run: cibuildwheel --output-dir wheelhouse
       env:
-        CIBW_BUILD: '${{ matrix.python-version }}-*'
         # rust doesn't seem to be available for musl linux on i686
-        CIBW_SKIP: '*-musllinux_i686'
-        # we build for "alt_arch_name" if it exists, else 'auto
-        CIBW_ARCHS: ${{ matrix.alt_arch_name || 'auto' }}
+        CIBW_SKIP: 'cp36-* *-musllinux_i686'
+        CIBW_ARCHS: ${{ matrix.arch }}
         CIBW_ENVIRONMENT: 'PATH="$HOME/.cargo/bin:$PATH"'
         CIBW_ENVIRONMENT_WINDOWS: 'PATH="$UserProfile\.cargo\bin;$PATH"'
         CIBW_BEFORE_BUILD: rustup show
@@ -106,9 +86,30 @@ jobs:
       with:
         name: wheels
         path: wheelhouse
+  
+  build-sdist:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: set up python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.9'
+
+    - name: build sdist
+      run: |
+        pip install -U setuptools-rust
+        python setup.py sdist -d wheelhouse
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: wheels
+        path: wheelhouse
 
   release:
-    needs: [build]
+    needs: [build, build-sdist]
     if: "success() && startsWith(github.ref, 'refs/tags/')"
     runs-on: ubuntu-latest
 
