@@ -11,7 +11,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        python-version: ['7', '8', '9', '10']
+        python-version: ['cp37', 'cp38', 'cp39', 'cp10', 'pp37', 'pp38', 'pp39']
         arch: [main, alt]
         include:
           - os: ubuntu
@@ -26,9 +26,18 @@ jobs:
             alt_arch_name: 'arm64 universal2'
         exclude:
           - os: macos
-            python-version: '7'
+            python-version: 'cp37'
             arch: alt
           - os: windows
+            arch: alt
+          - os: macos
+            python-version: 'pp37'
+            arch: alt
+          - os: macos
+            python-version: 'pp38'
+            arch: alt
+          - os: macos
+            python-version: 'pp39'
             arch: alt
 
     runs-on: ${{ format('{0}-latest', matrix.os) }}
@@ -74,7 +83,7 @@ jobs:
     - name: build ${{ matrix.platform || matrix.os }} binaries
       run: cibuildwheel --output-dir wheelhouse
       env:
-        CIBW_BUILD: 'cp3${{ matrix.python-version }}-*'
+        CIBW_BUILD: '${{ matrix.python-version }}-*'
         # rust doesn't seem to be available for musl linux on i686
         CIBW_SKIP: '*-musllinux_i686'
         # we build for "alt_arch_name" if it exists, else 'auto
