@@ -6,7 +6,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 setup(
-    name="ril",
+    name="ril-py",
     author="Cryptex",
     license="MIT",
     version="0.1.0",
