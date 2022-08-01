@@ -5,13 +5,13 @@ on: [push, pull_request]
 jobs:
   build: # Workflow credit to https://github.com/samuelcolvin/rtoml/blob/main/.github/workflows/ci.yml
     name: >
-      build py3.${{ matrix.python-version }} on ${{ matrix.platform || matrix.os }}
+      build ${{ matrix.python-version }} on ${{ matrix.platform || matrix.os }}
       (${{ matrix.alt_arch_name || matrix.arch }})
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        python-version: ['cp37', 'cp38', 'cp39', 'cp10', 'pp37', 'pp38', 'pp39']
+        python-version: ['cp37', 'cp38', 'cp39', 'cp310', 'pp37', 'pp38', 'pp39']
         arch: [main, alt]
         include:
           - os: ubuntu
