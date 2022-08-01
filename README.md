@@ -29,11 +29,11 @@ By the first stable release, we plan to support the following image encodings:
 
 There will be prebuilt wheels for those platforms:
 
-* Linux x86-64: Cpython 3.7, 3.8, 3.9, 3.10
-* MacOS x86-64: Cpython 3.7, 3.8, 3.9, 3.10
-* Windows x86-64: Cpython 3.7, 3.8, 3.9, 3.10
-* Linux i686: Cpython 3.7, 3.8, 3.9, 3.10
-* Linux aarch64: Cpython 3.7, 3.8, 3.9, 3.10
+* Linux x86-64: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
+* MacOS x86-64: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
+* Windows x86-64: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
+* Linux i686: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
+* Linux aarch64: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
 * MacOS aarch64: Cpython 3.8, 3.9, 3.10
 
 If you want another platform to have prebuilt wheels, please open an issue.
@@ -67,35 +67,21 @@ Pip will handle the building process.
 ## Examples
 
 #### Open an image, invert it, and then save it:
-```rs
-use ril::prelude::*;
+```py
+from ril import Image
 
-fn main() -> ril::Result<()> {
-    let image = Image::open("sample.png")?;
-    image.invert();
-    image.save_inferred("inverted.png")?;
-    
-    Ok(())
-}
-```
+image = Image.open("example.png")
+image.invert()
 
-or, why not use method chaining?
-```rs
-Image::open("sample.png")?
-    .inverted()
-    .save_inferred("inverted.png")?;
+image.save("example.png")
 ```
 
 #### Create a new black image, open the sample image, and paste it on top of the black image:
-```rs
-let image = Image::new(600, 600, Rgb::black());
-image.paste(100, 100, Image::open("sample.png")?);
-image.save_inferred("sample_on_black.png")?;
-```
+```py
+from ril import Image, Pixel
 
-you can still use method chaining, but this accesses a lower level interface:
-```rs
-let image = Image::new(600, 600, Rgb::black())
-    .with(&Paste::new(Image::open("sample.png")?).with_position(100, 100))
-    .save_inferred("sample_on_black.png")?;
+image = Image.new(600, 600, Pixel.from_rgb(0, 0, 0))
+image.paste(100, 100, Image.open("sample.png"))
+
+image.save("sample_on_black.png", "PNG") # You can also specify format if you like
 ```
