@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use crate::draw::DrawEntity;
 use crate::error::Error;
 use crate::pixels::{BitPixel, Pixel, Rgb, Rgba, L};
+use crate::types::ResizeAlgorithm;
 use crate::utils::cast_pixel_to_pyobject;
 use pyo3::types::PyBytes;
 use pyo3::{
@@ -16,7 +17,7 @@ use ril::{Banded, Dynamic, Image as RilImage, ImageFormat};
 #[pyclass]
 #[derive(Clone)]
 pub struct Image {
-    inner: RilImage<Dynamic>,
+    pub inner: RilImage<Dynamic>,
 }
 
 macro_rules! cast_bands_to_pyobjects {
@@ -193,6 +194,10 @@ impl Image {
         entity.0.draw(&mut self.inner);
     }
 
+    fn resize(&mut self, width: u32, height: u32, algo: ResizeAlgorithm) {
+        self.inner.resize(width, height, algo.into())
+    }
+
     /// Encodes the image with the given encoding and returns `bytes`.
     fn encode(&self, encoding: &str) -> Result<&PyBytes, Error> {
         let encoding = ImageFormat::from_extension(encoding)?;
@@ -200,7 +205,7 @@ impl Image {
         let mut buf = Vec::new();
         self.inner.encode(encoding, &mut buf)?;
 
-        // SAFETY: We acquired the GIL before calling `assume_gil_acquired`. 
+        // SAFETY: We acquired the GIL before calling `assume_gil_acquired`.
         // `assume_gil_acquired` is only used to ensure that PyBytes don't outlive the current function
         unsafe {
             Python::with_gil(|_| {

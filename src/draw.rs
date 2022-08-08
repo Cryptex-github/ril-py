@@ -6,7 +6,10 @@ use pyo3::{
     types::PyType,
 };
 use ril::{
-    draw::{Border as RilBorder, BorderPosition as RilBorderPosition, Rectangle as RilRectangle},
+    draw::{
+        Border as RilBorder, BorderPosition as RilBorderPosition, Ellipse as RilEllipse,
+        Rectangle as RilRectangle,
+    },
     Draw, Dynamic, OverlayMode,
 };
 
@@ -103,6 +106,105 @@ impl Border {
 impl Display for Border {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(&self.__repr__())
+    }
+}
+
+#[pyclass]
+#[derive(Clone)]
+pub struct Ellipse {
+    pub inner: RilEllipse<Dynamic>,
+}
+
+#[pymethods]
+impl Ellipse {
+    #[new]
+    #[args("*", position, radii, border, fill, overlay)]
+    fn new(
+        position: Xy,
+        radii: Xy,
+        border: Option<Border>,
+        fill: Option<Pixel>,
+        overlay: Option<&str>,
+    ) -> PyResult<Self> {
+        let mut inner = RilEllipse::<Dynamic> {
+            position,
+            radii,
+            border: None,
+            fill: None,
+            overlay: None
+        };
+
+        inner.border = border.map(|i| i.inner);
+
+        inner.fill = fill.map(|i| i.inner);
+
+        if let Some(overlay) = overlay {
+            inner.overlay = Some(cast_overlay(overlay)?);
+        }
+
+        Ok(Self { inner })
+    }
+
+    #[classmethod]
+    fn from_bounding_box(_: &PyType, x1: u32, y1: u32, x2: u32, y2: u32) -> Self {
+        Self {
+            inner: RilEllipse::from_bounding_box(x1, y1, x2, y2),
+        }
+    }
+
+    #[classmethod]
+    fn circle(_: &PyType, x: u32, y: u32, radius: u32) -> Self {
+        Self {
+            inner: RilEllipse::circle(x, y, radius),
+        }
+    }
+
+    #[getter]
+    fn get_position(&self) -> Xy {
+        self.inner.position
+    }
+
+    #[getter]
+    fn get_radii(&self) -> Xy {
+        self.inner.radii
+    }
+
+    #[getter]
+    fn get_border(&self) -> Option<Border> {
+        self.inner
+            .border
+            .as_ref()
+            .map(|b| Border { inner: b.clone() })
+    }
+
+    #[getter]
+    fn get_fill(&self, py: Python<'_>) -> Option<PyObject> {
+        if let Some(fill) = self.inner.fill {
+            Some(cast_pixel_to_pyobject(py, &fill))
+        } else {
+            None
+        }
+    }
+
+    #[getter]
+    fn get_overlay(&self) -> Option<String> {
+        self.inner.overlay.map(|o| format!("{}", o))
+    }
+
+    fn __repr__(&self, py: Python<'_>) -> String {
+        format!(
+            "<Ellipse position=({}, {}) radii=({}, {}) border={} fill={} overlay={}>",
+            self.get_position().0,
+            self.get_position().1,
+            self.get_radii().0,
+            self.get_radii().1,
+            self.get_border()
+                .map_or("None".to_string(), |f| format!("{}", f)),
+            self.get_fill(py)
+                .map_or("None".to_string(), |f| format!("{}", f)),
+            self.get_overlay()
+                .map_or("None".to_string(), |f| format!("{}", f))
+        )
     }
 }
 
@@ -251,6 +353,6 @@ pub struct DrawEntity<'a>(pub Box<dyn Draw<Dynamic>>, PhantomData<&'a ()>);
 
 impl<'a> FromPyObject<'a> for DrawEntity<'a> {
     fn extract(obj: &'a PyAny) -> PyResult<Self> {
-        impl_draw_entities!(obj, Rectangle)
+        impl_draw_entities!(obj, Rectangle, Ellipse)
     }
 }

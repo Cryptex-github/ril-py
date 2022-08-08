@@ -15,6 +15,7 @@ impl From<Error> for PyErr {
             Error::Ril(err) => match err {
                 RilError::InvalidHexCode(_) => PyValueError::new_err(format!("{}", err)),
                 RilError::InvalidExtension(_) => PyValueError::new_err(format!("{}", err)),
+                RilError::EncodingError(_) => PyRuntimeError::new_err(format!("{}", err)),
                 RilError::DecodingError(_) => PyRuntimeError::new_err(format!("{}", err)),
                 RilError::UnknownEncodingFormat => PyRuntimeError::new_err(format!("{}", err)),
                 RilError::UnsupportedColorType => PyValueError::new_err(format!("{}", err)),

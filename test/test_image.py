@@ -1,3 +1,5 @@
+# type: ignore
+
 import ril
 
 def test_create_image() -> None:
