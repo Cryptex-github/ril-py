@@ -193,7 +193,7 @@ impl Image {
     }
 
     fn resize(&mut self, width: u32, height: u32, algo: ResizeAlgorithm) {
-        self.inner.resize(width, height, algo.into())
+        self.inner.resize(width, height, algo.into());
     }
 
     /// Encodes the image with the given encoding and returns `bytes`.
@@ -245,7 +245,7 @@ impl Image {
             .into_iter()
             .map(|p| {
                 p.into_iter()
-                    .map(|p| cast_pixel_to_pyobject(py, p))
+                    .map(|p| cast_pixel_to_pyobject(py, p.clone()))
                     .collect::<Vec<PyObject>>()
             })
             .collect::<Vec<Vec<PyObject>>>()
@@ -306,11 +306,11 @@ impl Image {
 
     /// Returns the pixel at the given coordinates.
     fn get_pixel(&self, py: Python<'_>, x: u32, y: u32) -> PyObject {
-        match self.inner.pixel(x, y) {
-            &Dynamic::BitPixel(v) => BitPixel::from(v).into_py(py),
-            &Dynamic::L(v) => L::from(v).into_py(py),
-            &Dynamic::Rgb(v) => Rgb::from(v).into_py(py),
-            &Dynamic::Rgba(v) => Rgba::from(v).into_py(py),
+        match *self.inner.pixel(x, y) {
+            Dynamic::BitPixel(v) => BitPixel::from(v).into_py(py),
+            Dynamic::L(v) => L::from(v).into_py(py),
+            Dynamic::Rgb(v) => Rgb::from(v).into_py(py),
+            Dynamic::Rgba(v) => Rgba::from(v).into_py(py),
         }
     }
 
@@ -321,7 +321,7 @@ impl Image {
 
     /// Inverts the image in-place.
     fn invert(&mut self) {
-        self.inner.invert()
+        self.inner.invert();
     }
 
     fn __len__(&self) -> usize {

@@ -179,16 +179,14 @@ impl Ellipse {
 
     #[getter]
     fn get_fill(&self, py: Python<'_>) -> Option<PyObject> {
-        if let Some(fill) = self.inner.fill {
-            Some(cast_pixel_to_pyobject(py, &fill))
-        } else {
-            None
-        }
+        self.inner
+            .fill
+            .map_or(None, |fill| Some(cast_pixel_to_pyobject(py, fill)))
     }
 
     #[getter]
     fn get_overlay(&self) -> Option<String> {
-        self.inner.overlay.map(|o| format!("{}", o))
+        self.inner.overlay.map(|o| o.to_string())
     }
 
     fn __repr__(&self, py: Python<'_>) -> String {
@@ -278,11 +276,9 @@ impl Rectangle {
 
     #[getter]
     fn get_fill(&self, py: Python<'_>) -> Option<PyObject> {
-        if let Some(fill) = self.inner.fill {
-            Some(cast_pixel_to_pyobject(py, &fill))
-        } else {
-            None
-        }
+        self.inner
+            .fill
+            .map_or(None, |fill| Some(cast_pixel_to_pyobject(py, fill)))
     }
 
     #[getter]
@@ -325,11 +321,11 @@ impl Rectangle {
             self.get_size().0,
             self.get_size().1,
             self.get_border()
-                .map_or("None".to_string(), |f| format!("{}", f)),
+                .map_or("None".to_string(), |f| f.to_string()),
             self.get_fill(py)
-                .map_or("None".to_string(), |f| format!("{}", f)),
+                .map_or("None".to_string(), |f| f.to_string()),
             self.get_overlay()
-                .map_or("None".to_string(), |f| format!("{}", f))
+                .map_or("None".to_string(), |f| f.to_string())
         )
     }
 }

@@ -13,13 +13,13 @@ impl From<Error> for PyErr {
     fn from(err: Error) -> Self {
         match err {
             Error::Ril(err) => match err {
-                RilError::InvalidHexCode(_) => PyValueError::new_err(format!("{}", err)),
-                RilError::InvalidExtension(_) => PyValueError::new_err(format!("{}", err)),
-                RilError::EncodingError(_) => PyRuntimeError::new_err(format!("{}", err)),
-                RilError::DecodingError(_) => PyRuntimeError::new_err(format!("{}", err)),
-                RilError::UnknownEncodingFormat => PyRuntimeError::new_err(format!("{}", err)),
-                RilError::UnsupportedColorType => PyValueError::new_err(format!("{}", err)),
-                RilError::IncompatibleImageData { .. } => {
+                RilError::InvalidHexCode(_)
+                | RilError::InvalidExtension(_)
+                | RilError::UnsupportedColorType => PyValueError::new_err(format!("{}", err)),
+                RilError::EncodingError(_)
+                | RilError::DecodingError(_)
+                | RilError::UnknownEncodingFormat
+                | RilError::IncompatibleImageData { .. } => {
                     PyRuntimeError::new_err(format!("{}", err))
                 }
                 RilError::IOError(_) => PyIOError::new_err(format!("{}", err)),

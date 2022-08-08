@@ -1,3 +1,10 @@
+#![allow(clippy::missing_const_for_fn)]
+
+// Warnings created by pyo3
+#![allow(clippy::used_underscore_binding)]
+#![allow(clippy::borrow_deref_ref)]
+#![allow(clippy::use_self)]
+
 mod draw;
 mod error;
 mod image;
@@ -8,10 +15,10 @@ mod utils;
 
 use draw::{Border, Ellipse, Rectangle};
 use image::Image;
-use pixels::*;
+use pixels::{BitPixel, Pixel, Rgb, Rgba, L};
 use pyo3::prelude::*;
 use sequence::{Frame, ImageSequence};
-use types::*;
+use types::{DisposalMethod, ResizeAlgorithm};
 
 type Xy = (u32, u32);
 

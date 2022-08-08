@@ -42,10 +42,10 @@ pub enum ResizeAlgorithm {
     Lanczos3,
 }
 
-impl From<ril::ResizeAlgorithm> for ResizeAlgorithm {
-    fn from(algo: ril::ResizeAlgorithm) -> Self {
+impl From<ResizeAlgorithm> for ril::ResizeAlgorithm {
+    fn from(algo: ResizeAlgorithm) -> ril::ResizeAlgorithm {
         cast_enum!(
-            ril::ResizeAlgorithm,
+            ResizeAlgorithm,
             Self,
             algo,
             Nearest,
@@ -59,22 +59,6 @@ impl From<ril::ResizeAlgorithm> for ResizeAlgorithm {
     }
 }
 
-impl Into<ril::ResizeAlgorithm> for ResizeAlgorithm {
-    fn into(self) -> ril::ResizeAlgorithm {
-        cast_enum!(
-            Self,
-            ril::ResizeAlgorithm,
-            self,
-            Nearest,
-            Box,
-            Bilinear,
-            Hamming,
-            Bicubic,
-            Mitchell,
-            Lanczos3
-        )
-    }
-}
 
 #[pyclass]
 pub enum DisposalMethod {
@@ -103,11 +87,5 @@ impl From<ril::DisposalMethod> for DisposalMethod {
             Background,
             Previous
         )
-    }
-}
-
-impl Into<ril::DisposalMethod> for DisposalMethod {
-    fn into(self) -> ril::DisposalMethod {
-        cast_enum!(Self, ril::DisposalMethod, self, None, Background, Previous)
     }
 }
