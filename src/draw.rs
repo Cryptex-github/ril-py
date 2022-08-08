@@ -197,11 +197,11 @@ impl Ellipse {
             self.get_radii().0,
             self.get_radii().1,
             self.get_border()
-                .map_or("None".to_string(), |f| format!("{}", f)),
+                .map_or("None".to_string(), |f| f.to_string()),
             self.get_fill(py)
-                .map_or("None".to_string(), |f| format!("{}", f)),
+                .map_or("None".to_string(), |f| f.to_string()),
             self.get_overlay()
-                .map_or("None".to_string(), |f| format!("{}", f))
+                .map_or("None".to_string(), |f| f.to_string())
         )
     }
 }
