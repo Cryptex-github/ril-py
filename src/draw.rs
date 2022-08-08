@@ -131,7 +131,7 @@ impl Ellipse {
             radii,
             border: None,
             fill: None,
-            overlay: None
+            overlay: None,
         };
 
         inner.border = border.map(|i| i.inner);

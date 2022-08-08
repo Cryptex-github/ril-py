@@ -1,9 +1,14 @@
-use std::{time::Duration, path::PathBuf};
+use std::{path::PathBuf, time::Duration};
 
-use pyo3::{prelude::*, types::{PyType, PyBytes}};
-use ril::{Dynamic, Frame as RilFrame, ImageSequence as RilImageSequence, FrameIterator, ImageFormat};
+use pyo3::{
+    prelude::*,
+    types::{PyBytes, PyType},
+};
+use ril::{
+    Dynamic, Frame as RilFrame, FrameIterator, ImageFormat, ImageSequence as RilImageSequence,
+};
 
-use crate::{image::Image, types::DisposalMethod, Xy, error::Error};
+use crate::{error::Error, image::Image, types::DisposalMethod, Xy};
 
 #[derive(Clone)]
 #[pyclass]
@@ -44,11 +49,17 @@ impl Frame {
 
     #[setter]
     fn set_delay(&mut self, delay: u64) {
-        self.inner.set_delay(Duration::from_millis(delay))
+        self.inner.set_delay(Duration::from_millis(delay));
     }
 
     fn __repr__(&self) -> String {
-        format!("<Frame delay={} dimensions=({}, {}) disposal={}>", self.get_delay(), self.get_dimensions().0, self.get_dimensions().1, self.get_disposal())
+        format!(
+            "<Frame delay={} dimensions=({}, {}) disposal={}>",
+            self.get_delay(),
+            self.get_dimensions().0,
+            self.get_dimensions().1,
+            self.get_disposal()
+        )
     }
 }
 
@@ -66,27 +77,26 @@ impl ImageSequence {
     #[classmethod]
     fn from_bytes(_: &PyType, bytes: &[u8], format: Option<&str>) -> Result<Self, Error> {
         Ok(if let Some(format) = format {
-            let inner = RilImageSequence::decode_from_bytes(ImageFormat::from_extension(format)?, bytes)?.into_sequence()?;
+            let inner =
+                RilImageSequence::decode_from_bytes(ImageFormat::from_extension(format)?, bytes)?
+                    .into_sequence()?;
             let iter = Box::new(inner.clone().into_iter());
 
-            Self {
-                inner,
-                iter
-            }
+            Self { inner, iter }
         } else {
-            let inner = RilImageSequence::decode_from_bytes(ImageFormat::infer_encoding(bytes), bytes)?.into_sequence()?;
+            let inner =
+                RilImageSequence::decode_from_bytes(ImageFormat::infer_encoding(bytes), bytes)?
+                    .into_sequence()?;
             let iter = Box::new(inner.clone().into_iter());
 
-            Self {
-                inner,
-                iter
-            }
+            Self { inner, iter }
         })
     }
 
     #[classmethod]
     fn from_frames(_: &PyType, frames: Vec<Frame>) -> Self {
-        let inner = RilImageSequence::from_frames(frames.into_iter().map(|x| x.inner).collect::<Vec<_>>());
+        let inner =
+            RilImageSequence::from_frames(frames.into_iter().map(|x| x.inner).collect::<Vec<_>>());
         let iter = Box::new(inner.clone().into_iter());
 
         Self { inner, iter }

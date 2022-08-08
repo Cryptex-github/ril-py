@@ -88,7 +88,7 @@ impl Display for DisposalMethod {
         match self {
             Self::None => f.write_str("None"),
             Self::Background => f.write_str("Background"),
-            Self::Previous => f.write_str("Previous")
+            Self::Previous => f.write_str("Previous"),
         }
     }
 }

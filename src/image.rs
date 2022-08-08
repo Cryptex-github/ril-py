@@ -45,8 +45,6 @@ macro_rules! ensure_mode {
         $(
             if $bands.$band.mode() != "L" {
                 return Err(PyTypeError::new_err(format!("Expected mode `L`, got `{}`", $bands.$band.mode())));
-            } else {
-                ()
             }
         )*
 
