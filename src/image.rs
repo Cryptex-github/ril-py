@@ -65,7 +65,7 @@ impl Image {
     /// fill: :class:`.Pixel`
     ///     The pixel used to fill the image.
     /// 
-    /// Example
+    /// Examples
     /// -------
     /// 
     /// .. code-block:: python3
@@ -87,12 +87,15 @@ impl Image {
     /// ----------
     /// bytes: bytes
     ///     The bytes of the Image.
-    /// format: Optional[str]
+    /// format: Optional[str], default: None
     ///     The format of the image, defaults to `None`.
     /// 
-    /// Errors
+    /// Raises
     /// ------
-    /// Error if the image is not valid, or fails to infer the format if is not provided.
+    /// ValueError
+    ///     Raised if the format provided is invalid.
+    /// RuntimeError
+    ///     Raised if the image can't be decoded or the format is unknown.
     #[classmethod]
     #[pyo3(text_signature = "(bytes, format = None)")]
     fn from_bytes(_: &PyType, bytes: &[u8], format: Option<&str>) -> Result<Self, Error> {
@@ -133,7 +136,19 @@ impl Image {
     /// Opens a file from the given path and decodes it into an image.
     ///
     /// The encoding of the image is automatically inferred.
-    /// You can explicitly pass in an encoding by using the [from_bytes] method.
+    /// You can explicitly pass in an encoding by using the :meth:`from_bytes` method.
+    /// 
+    /// Parameters
+    /// ----------
+    /// path: str
+    ///     The path to the image.
+    /// 
+    /// Raises
+    /// ------
+    /// ValueError
+    ///     The file extension is invalid.
+    /// RuntimeError
+    ///     Fails to infer file format or fails to decode image.
     #[classmethod]
     fn open(_: &PyType, path: PathBuf) -> Result<Self, Error> {
         Ok(Self {
@@ -141,13 +156,13 @@ impl Image {
         })
     }
 
-    /// Returns the overlay mode of the image.
+    /// str: Returns the overlay mode of the image.
     #[getter]
     fn overlay_mode(&self) -> String {
         format!("{}", self.inner.overlay_mode())
     }
 
-    /// Returns the mode of the image.
+    /// str: Returns the mode of the image.
     #[getter]
     fn mode(&self) -> &str {
         match self.inner.pixel(0, 0) {
@@ -158,18 +173,28 @@ impl Image {
         }
     }
 
-    /// Returns the width of the image.
+    /// int: Returns the width of the image.
     #[getter]
     fn width(&self) -> u32 {
         self.inner.width()
     }
 
-    /// Returns the height of the image.
+    /// int: Returns the height of the image.
     #[getter]
     fn height(&self) -> u32 {
         self.inner.height()
     }
 
+    /// Return the bands of the image.
+    /// 
+    /// Returns
+    /// -------
+    /// (:class:`.L`, :class:`.L`, :class:`.L`)
+    /// 
+    /// Errors
+    /// ------
+    /// TypeError
+    ///     The image is not of mode `RGB` or `RGBA`.
     fn bands(&self, py: Python<'_>) -> Result<PyObject, Error> {
         match self.mode() {
             "RGB" => {
@@ -189,8 +214,15 @@ impl Image {
         }
     }
 
+    /// Creates a new image from the given bands.
+    /// 
+    /// Parameters
+    /// ----------
+    /// bands: *:class:`.L`
+    ///     The bands of the image.
     #[classmethod]
     #[args(bands = "*")]
+    #[pyo3(text_signature = "(*bands)")]
     fn from_bands(_: &PyType, bands: &PyTuple) -> PyResult<Self> {
         match bands.len() {
             3 => {
@@ -213,27 +245,73 @@ impl Image {
                 ))
             }
             _ => Err(PyValueError::new_err(format!(
-                "Expected a tuple with 3 or 4 elements, got `{}`",
+                "Expected 3 or 4 arguments, got `{}`",
                 bands.len()
             ))),
         }
     }
 
     /// Crops this image in place to the given bounding box.
+    /// 
+    /// Parameters
+    /// ----------
+    /// x1: int
+    ///     x1
+    /// y1: int
+    ///     y1
+    /// x2: int
+    ///     x2
+    /// y2: int
+    ///     y2
+    #[pyo3(text_signature = "(x1, y1, x2, y2)")]
     fn crop(&mut self, x1: u32, y1: u32, x2: u32, y2: u32) {
         self.inner.crop(x1, y1, x2, y2);
     }
 
     /// Draws an object or shape onto this image.
+    /// 
+    /// Parameters
+    /// ----------
+    /// entity: Union[:class:`.Rectangle`, :class:`.Ellipse`]
+    ///     The entity to draw on the image.
     fn draw(&mut self, entity: DrawEntity) {
         entity.0.draw(&mut self.inner);
     }
 
+    /// Resizes this image in place to the given dimensions using the given resizing algorithm in place.
+    /// 
+    /// Parameters
+    /// ----------
+    /// width: int
+    ///     The target width to resize to
+    /// height: int
+    ///     The target height to resize to
+    /// algo: :class:`.ResizeAlgorithm`
+    ///     The resize algorithm to use
+    #[pyo3(text_signature = "(width, height, algo)")]
     fn resize(&mut self, width: u32, height: u32, algo: ResizeAlgorithm) {
         self.inner.resize(width, height, algo.into());
     }
 
     /// Encodes the image with the given encoding and returns `bytes`.
+    /// 
+    /// Parameters
+    /// ----------
+    /// encoding: str
+    ///     The encoding of the image.
+    /// 
+    /// Returns
+    /// -------
+    /// bytes
+    ///     The encoded bytes of the image.
+    /// 
+    /// Raises
+    /// ------
+    /// ValueError
+    ///     The encoding is invalid.
+    /// RuntimeError
+    ///     Fails to encode the image.
+    #[pyo3(text_signature = "(encoding)")]
     fn encode(&self, encoding: &str) -> Result<&PyBytes, Error> {
         let encoding = ImageFormat::from_extension(encoding)?;
 
@@ -253,7 +331,21 @@ impl Image {
 
     /// Saves the image to the given path.
     /// If encoding is not provided, it will attempt to infer it by the path/filename's extension
-    /// You can try saving to a memory buffer by using the encode method.
+    /// You can try saving to a memory buffer by using the :meth:`encode` method.
+    /// 
+    /// Parameters
+    /// ----------
+    /// path: str
+    ///     The path to save the image to.
+    /// encoding: Optional[str], default: None
+    ///     The encoding of the image, defaults to `None`.
+    /// 
+    /// Raises
+    /// ------
+    /// ValueError
+    ///     The encoding provided is invalid.
+    /// RuntimeError
+    ///     Fails to encode the image or fails to infer the image format.
     fn save(&self, path: PathBuf, encoding: Option<&str>) -> Result<(), Error> {
         if let Some(encoding) = encoding {
             let encoding = ImageFormat::from_extension(encoding)?;
@@ -273,9 +365,14 @@ impl Image {
     ///
     /// where the width of the inner list is determined by the width of the image.
     ///
-    /// # Warning
+    /// .. warning:: **This function involves heavy operation**
     ///
-    /// This function requires multiple iterations, so it is a heavy operation for larger image.
+    ///     This function requires multiple iterations, so it is a heavy operation for larger image.
+    /// 
+    /// Returns
+    /// -------
+    /// List[List[Union[:class:`.BitPixel`, :class:`.L`, :class:`.Rgb`, :class:`.Rgba`]]]
+    ///     The pixels of the image.
     fn pixels(&self, py: Python<'_>) -> Vec<Vec<PyObject>> {
         self.inner
             .pixels()
