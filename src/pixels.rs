@@ -7,41 +7,56 @@ use ril::Dynamic;
 #[pyclass]
 #[derive(Clone, Eq, PartialEq)]
 pub struct BitPixel {
+    /// bool: Whether the pixel is on.
     #[pyo3(get, set)]
     value: bool,
 }
 
+/// Represents an L, or luminance pixel that is stored as only one single number representing how bright, or intense, the pixel is. 
+/// 
+/// This can be thought of as the “unit channel” as this represents only a single channel in which other pixel types can be composed of.
 #[pyclass]
 #[derive(Clone, Eq, PartialEq)]
 pub struct L {
+    /// int: The luminance value of the pixel, between 0 and 255.
     #[pyo3(get, set)]
     value: u8,
 }
 
+/// Represents an RGB pixel.
 #[pyclass]
 #[derive(Clone, Eq, PartialEq)]
 pub struct Rgb {
+    /// int: The red component of the pixel.
     #[pyo3(get, set)]
     r: u8,
+    /// int: The green component of the pixel.
     #[pyo3(get, set)]
     g: u8,
+    /// int: The blue component of the pixel.
     #[pyo3(get, set)]
     b: u8,
 }
 
+/// Represents an RGBA pixel.
 #[pyclass]
 #[derive(Clone, Eq, PartialEq)]
 pub struct Rgba {
+    /// int: The red component of the pixel.
     #[pyo3(get, set)]
     r: u8,
+    /// int: The green component of the pixel.
     #[pyo3(get, set)]
     g: u8,
+    /// int: The blue component of the pixel.
     #[pyo3(get, set)]
     b: u8,
+    /// int: The alpha component of the pixel.
     #[pyo3(get, set)]
     a: u8,
 }
 
+/// The user created Pixel type.
 #[pyclass]
 #[derive(Clone, Eq, PartialEq)]
 pub struct Pixel {
@@ -56,28 +71,66 @@ impl From<Dynamic> for Pixel {
 
 #[pymethods]
 impl Pixel {
+    /// Create a bitpixel.
+    /// 
+    /// Parameters
+    /// ----------
+    /// value: bool
+    ///     Whether the pixel is on.
     #[classmethod]
+    #[pyo3(text_signature = "(cls, value)")]
     fn from_bitpixel(_: &PyType, value: bool) -> Self {
         Self {
             inner: Dynamic::BitPixel(ril::BitPixel(value)),
         }
     }
-
+    
+    /// Create a L Pixel.
+    /// 
+    /// Parameters
+    /// ----------
+    /// value: int
+    ///     The luminance value of the pixel, between 0 and 255.
     #[classmethod]
+    #[pyo3(text_signature = "(cls, value)")]
     fn from_l(_: &PyType, value: u8) -> Self {
         Self {
             inner: Dynamic::L(ril::L(value)),
         }
     }
 
+    /// Creates a Rgb Pixel
+    /// 
+    /// Parameters
+    /// ----------
+    /// r: int
+    ///     The red component of the pixel.
+    /// g: int
+    ///     The green component of the pixel.
+    /// b: int
+    ///     The blue component of the pixel.
     #[classmethod]
+    #[pyo3(text_signature = "(cls, r, g, b)")]
     fn from_rgb(_: &PyType, r: u8, g: u8, b: u8) -> Self {
         Self {
             inner: Dynamic::Rgb(ril::Rgb { r, g, b }),
         }
     }
 
+    /// Creates a Rgba Pixel
+    /// 
+    /// Parameters
+    /// ----------
+    /// r: int
+    ///     The red component of the pixel.
+    /// g: int
+    ///     The green component of the pixel.
+    /// b: int
+    ///     The blue component of the pixel.
+    /// a: int
+    ///     The alpha component of the pixel.
     #[classmethod]
+    #[pyo3(text_signature = "(cls, r, g, b, a)")]
     fn from_rgba(_: &PyType, r: u8, g: u8, b: u8, a: u8) -> Self {
         Self {
             inner: Dynamic::Rgba(ril::Rgba { r, g, b, a }),

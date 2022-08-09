@@ -136,7 +136,7 @@ impl Display for Border {
 /// 
 ///     This also does not set any border or fill for the ellipse, you must explicitly set either one of them.
 /// 
-/// Paramters
+/// Parameters
 /// ---------
 /// position: (int, int)
 ///     The position of the ellipse
@@ -145,7 +145,7 @@ impl Display for Border {
 /// border: Optional[:class:`.Border`]
 ///     The border of the ellipse.
 /// fill: Optional[:class:`.Pixel`]
-///     The color to use for filling the Ellipse
+///     The color to use for filling the ellipse
 /// overlay: Optional[str]
 ///     The overlay mode of the ellipse.
 /// 
@@ -303,8 +303,39 @@ impl Ellipse {
     }
 }
 
+/// A rectangle.
+/// 
+/// .. warning::
+///     Using any of the predefined construction methods will automatically set the position to (0, 0). 
+///     If you want to specify a different position, you must set the position with `.position`
+/// 
+///     You must specify a width and height for the rectangle with something such as with_size. 
+///     If you don't, a panic will be raised during drawing. 
+///     You can also try using from_bounding_box to create a rectangle from a bounding box, which automatically fills in the size.
+/// 
+///     Additionally, a panic will be raised during drawing if you do not specify either a fill color or a border.
+///     these can be set with `.fill` and `.border` respectively.
+/// 
+/// Parameters
+/// ----------
+/// position: (int, int)
+///     The position of the rectangle
+/// size: (int, int)
+///     The size of the rectangle
+/// border: Optional[:class:`.Border`]
+///     The border of the ellipse.
+/// fill: Optional[:class:`.Pixel`]
+///     The color to use for filling the rectangle
+/// overlay: Optional[str]
+///     The overlay mode of the rectangle.
+/// 
+/// Raises
+/// ------
+/// ValueError
+///     The overlay mode provided is not one of `replace`, or `merge`
 #[pyclass]
 #[derive(Clone)]
+#[pyo3(text_signature = "(*, position, size, border, fill, overlay)")]
 pub struct Rectangle {
     pub inner: RilRectangle<Dynamic>,
 }
@@ -346,23 +377,36 @@ impl Rectangle {
         })
     }
 
+    /// Creates a new rectangle from two coordinates specified as 4 parameters.
+    /// The first coordinate is the top-left corner of the rectangle, and the second coordinate is the bottom-right corner of the rectangle.
+    /// 
+    /// Parameters
+    /// ----------
+    /// x1: int
+    /// y1: int
+    /// x2: int
+    /// y2: int
     #[classmethod]
+    #[pyo3(text_signature = "(cls, x1, y1, x2, y2)")]
     fn from_bounding_box(_: &PyType, x1: u32, y1: u32, x2: u32, y2: u32) -> Self {
         Self {
             inner: RilRectangle::from_bounding_box(x1, y1, x2, y2),
         }
     }
-
+    
+    /// (int, int): The position of the rectangle. The top-left corner of the rectangle will be rendered at this position.
     #[getter]
     fn get_position(&self) -> Xy {
         self.inner.position
     }
 
+    /// (int, int): The dimensions of the rectangle, in pixels.
     #[getter]
     fn get_size(&self) -> Xy {
         self.inner.size
     }
 
+    /// :class:`.Border`: The border of the rectangle, or None if there is no border.
     #[getter]
     fn get_border(&self) -> Option<Border> {
         self.inner
@@ -371,6 +415,7 @@ impl Rectangle {
             .map(|b| Border { inner: b.clone() })
     }
 
+    /// Optional[Union[:class:`.BitPixel`, :class:`.L`, :class:`.Rgb`, :class:`.Rgba`]]: The color used to fill the rectangle.
     #[getter]
     fn get_fill(&self, py: Python<'_>) -> Option<PyObject> {
         self.inner
@@ -378,6 +423,7 @@ impl Rectangle {
             .map_or(None, |fill| Some(cast_pixel_to_pyobject(py, fill)))
     }
 
+    /// Optional[str]: The overlay mode of the rectangle.
     #[getter]
     fn get_overlay(&self) -> Option<String> {
         self.inner.overlay.map(|o| format!("{}", o))

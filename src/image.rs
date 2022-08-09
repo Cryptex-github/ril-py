@@ -498,7 +498,7 @@ impl Image {
 
     /// Sets the pixel at the given coordinates to the given pixel.
     /// 
-    /// Paramters
+    /// Parameters
     /// ---------
     /// x: int
     ///     The x coordinate

@@ -17,6 +17,16 @@ Image
 Pixel
 -----
 
+There are two pixel type.
+
+:class:`Pixel` and other pixel classes.
+
+:class:`Pixel` is what the user creates, to represent the pixel type they desire.
+
+Other pixel types are usually returned from the library.
+
+This is done due to some limitation between converting types.
+
 .. autoclass:: BitPixel
     :members:
 
