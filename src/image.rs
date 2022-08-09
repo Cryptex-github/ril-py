@@ -72,7 +72,7 @@ impl Image {
     /// 
     ///     Image.new(100, 100, Pixel.from_rgb(255, 255, 255))
     #[classmethod]
-    #[pyo3(text_signature = "(width: int, height: int, fill: Pixel)")]
+    #[pyo3(text_signature = "(width, height, fill)")]
     fn new(_: &PyType, width: u32, height: u32, fill: Pixel) -> Self {
         Self {
             inner: RilImage::new(width, height, fill.inner),
@@ -94,7 +94,7 @@ impl Image {
     /// ------
     /// Error if the image is not valid, or fails to infer the format if is not provided.
     #[classmethod]
-    #[pyo3(text_signature = "bytes: bytes, format: Optional[str] = None")]
+    #[pyo3(text_signature = "(bytes, format = None)")]
     fn from_bytes(_: &PyType, bytes: &[u8], format: Option<&str>) -> Result<Self, Error> {
         Ok(if let Some(format) = format {
             Self {
@@ -117,7 +117,7 @@ impl Image {
     /// pixels: List[:class:`.Pixel`]
     ///     A List of pixels.
     #[classmethod]
-    #[pyo3(text_signature = "width: int, pixels: List[Pixel]")]
+    #[pyo3(text_signature = "(width, pixels)")]
     fn from_pixels(_: &PyType, width: u32, pixels: Vec<Pixel>) -> Self {
         Self {
             inner: RilImage::from_pixels(
