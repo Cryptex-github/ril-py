@@ -32,7 +32,6 @@ extensions = [
     'sphinx.ext.extlinks',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
-    'enum_tools.autoenum',
 ]
 
 autodoc_typehints = 'none'
