@@ -73,12 +73,6 @@ jobs:
         pip install -U setuptools-rust
         python setup.py sdist -d wheelhouse
 
-    - name: Set up QEMU
-      if: matrix.os == 'ubuntu'
-      uses: docker/setup-qemu-action@v1
-      with:
-        platforms: all
-
     - name: build ${{ matrix.platform || matrix.os }} binaries
       run: cibuildwheel --output-dir wheelhouse
       env:
