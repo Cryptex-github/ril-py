@@ -1,7 +1,7 @@
 Welcome to Ril's documentation!
 ====================================
 
-**R**ust **I**maging **L**ibrary's Python binding: A performant and high-level image processing library for Python written in Rust 
+Rust Imaging Library's Python binding: A performant and high-level image processing library for Python written in Rust 
 
 Ril
 ===

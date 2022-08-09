@@ -34,7 +34,7 @@ extensions = [
     'sphinx.ext.napoleon',
 ]
 
-autodoc_typehints = 'none'
+autodoc_typehints = 'both'
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 

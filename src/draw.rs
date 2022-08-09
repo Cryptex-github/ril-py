@@ -39,6 +39,7 @@ fn from_border_position(position: RilBorderPosition) -> String {
     }
 }
 
+/// Represents a shape border.
 #[pyclass]
 #[derive(Clone)]
 pub struct Border {
