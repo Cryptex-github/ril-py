@@ -13,14 +13,13 @@ macro_rules! cast_enum {
 }
 
 /// A filtering algorithm that is used to resize an image.
-#[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 #[pyclass]
 pub enum ResizeAlgorithm {
     /// A simple nearest neighbor algorithm. Although the fastest, this gives the lowest quality
     /// resizings.
     ///
     /// When upscaling this is good if you want a "pixelated" effect with no aliasing.
-    #[default]
     Nearest,
     /// A box filter algorithm. Equivalent to the [`Nearest`] filter if you are upscaling.
     Box,
