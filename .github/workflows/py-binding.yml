@@ -36,6 +36,8 @@ jobs:
           - os: macos
             python-version: 'pp39'
             arch: alt
+          - os: ubuntu
+            arch: alt
 
     runs-on: ${{ format('{0}-latest', matrix.os) }}
     steps:
