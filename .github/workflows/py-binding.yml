@@ -18,9 +18,6 @@ jobs:
             platform: linux
           - os: windows
             ls: dir
-          - os: ubuntu
-            arch: alt
-            alt_arch_name: 'aarch64'
           - os: macos
             arch: alt
             alt_arch_name: 'arm64 universal2'
