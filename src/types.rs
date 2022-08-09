@@ -62,7 +62,7 @@ impl From<ResizeAlgorithm> for ril::ResizeAlgorithm {
 
 #[pyclass]
 pub enum DisposalMethod {
-    None,
+    Null,
     Background,
     Previous,
 }
@@ -70,7 +70,7 @@ pub enum DisposalMethod {
 impl Display for DisposalMethod {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::None => f.write_str("None"),
+            Self::Null => f.write_str("Null"),
             Self::Background => f.write_str("Background"),
             Self::Previous => f.write_str("Previous"),
         }
@@ -79,13 +79,10 @@ impl Display for DisposalMethod {
 
 impl From<ril::DisposalMethod> for DisposalMethod {
     fn from(method: ril::DisposalMethod) -> Self {
-        cast_enum!(
-            ril::DisposalMethod,
-            Self,
-            method,
-            None,
-            Background,
-            Previous
-        )
+        match method {
+            ril::DisposalMethod::None => Self::Null,
+            ril::DisposalMethod::Background => Self::Background,
+            ril::DisposalMethod::Previous => Self::Previous,
+        }
     }
 }

@@ -1,22 +1,25 @@
 use std::fmt::Display;
 
-use pyo3::{prelude::*, types::PyType};
+use pyo3::{prelude::*, types::PyType, pyclass::CompareOp};
 use ril::Dynamic;
 
 /// Represents a single-bit pixel that represents either a pixel that is on or off.
 #[pyclass]
+#[derive(Clone, Eq, PartialEq)]
 pub struct BitPixel {
     #[pyo3(get, set)]
     value: bool,
 }
 
 #[pyclass]
+#[derive(Clone, Eq, PartialEq)]
 pub struct L {
     #[pyo3(get, set)]
     value: u8,
 }
 
 #[pyclass]
+#[derive(Clone, Eq, PartialEq)]
 pub struct Rgb {
     #[pyo3(get, set)]
     r: u8,
@@ -27,6 +30,7 @@ pub struct Rgb {
 }
 
 #[pyclass]
+#[derive(Clone, Eq, PartialEq)]
 pub struct Rgba {
     #[pyo3(get, set)]
     r: u8,
@@ -39,7 +43,7 @@ pub struct Rgba {
 }
 
 #[pyclass]
-#[derive(Clone)]
+#[derive(Clone, Eq, PartialEq)]
 pub struct Pixel {
     pub inner: Dynamic,
 }
@@ -80,6 +84,22 @@ impl Pixel {
         }
     }
 
+    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyResult<PyObject> {
+        match op {
+            CompareOp::Eq => {
+                let other = other.extract::<Self>(py)?;
+                let val = self == &other;
+                Ok(val.into_py(py))
+            }
+            CompareOp::Ne => {
+                let other = other.extract::<Self>(py)?;
+                let val = self != &other;
+                Ok(val.into_py(py))
+            }
+            _ => Ok(py.NotImplemented()),
+        }
+    }
+
     fn __repr__(&self) -> String {
         let out = match self.inner {
             Dynamic::BitPixel(v) => format!("BitPixel({})", v.value()),
@@ -105,6 +125,22 @@ impl BitPixel {
         Self { value }
     }
 
+    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyResult<PyObject> {
+        match op {
+            CompareOp::Eq => {
+                let other = other.extract::<Self>(py)?;
+                let val = self == &other;
+                Ok(val.into_py(py))
+            }
+            CompareOp::Ne => {
+                let other = other.extract::<Self>(py)?;
+                let val = self != &other;
+                Ok(val.into_py(py))
+            }
+            _ => Ok(py.NotImplemented()),
+        }
+    }
+
     fn __repr__(&self) -> String {
         format!("<BitPixel value={}>", self.value)
     }
@@ -115,6 +151,22 @@ impl L {
     #[new]
     fn new(value: u8) -> Self {
         Self { value }
+    }
+
+    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyResult<PyObject> {
+        match op {
+            CompareOp::Eq => {
+                let other = other.extract::<Self>(py)?;
+                let val = self == &other;
+                Ok(val.into_py(py))
+            }
+            CompareOp::Ne => {
+                let other = other.extract::<Self>(py)?;
+                let val = self != &other;
+                Ok(val.into_py(py))
+            }
+            _ => Ok(py.NotImplemented()),
+        }
     }
 
     fn __repr__(&self) -> String {
@@ -129,6 +181,22 @@ impl Rgb {
         Self { r, g, b }
     }
 
+    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyResult<PyObject> {
+        match op {
+            CompareOp::Eq => {
+                let other = other.extract::<Self>(py)?;
+                let val = self == &other;
+                Ok(val.into_py(py))
+            }
+            CompareOp::Ne => {
+                let other = other.extract::<Self>(py)?;
+                let val = self != &other;
+                Ok(val.into_py(py))
+            }
+            _ => Ok(py.NotImplemented()),
+        }
+    }
+
     fn __repr__(&self) -> String {
         format!("<Rgb r={} g={} b={}>", self.r, self.g, self.b)
     }
@@ -139,6 +207,22 @@ impl Rgba {
     #[new]
     fn new(r: u8, g: u8, b: u8, a: u8) -> Self {
         Self { r, g, b, a }
+    }
+
+    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyResult<PyObject> {
+        match op {
+            CompareOp::Eq => {
+                let other = other.extract::<Self>(py)?;
+                let val = self == &other;
+                Ok(val.into_py(py))
+            }
+            CompareOp::Ne => {
+                let other = other.extract::<Self>(py)?;
+                let val = self != &other;
+                Ok(val.into_py(py))
+            }
+            _ => Ok(py.NotImplemented()),
+        }
     }
 
     fn __repr__(&self) -> String {
