@@ -4,11 +4,11 @@ authors = ["Cryptex"]
 version = "0.1.0"
 license = "MIT"
 edition = "2021"
-description = "Rust Imaging Library's Python binding: A high-level image processing crate for Python written in Rust"
+description = "Rust Imaging Library's Python binding: A performant and high-level image processing library for Python written in Rust"
 repository = "https://github.com/Cryptex-github/ril-py"
 homepage = "https://github.com/Cryptex-github/ril-py"
 readme = "README.md"
-keywords = ["ril", "imaging", "image", "processing", "editing", "graphics"]
+keywords = ["ril", "imaging", "image", "processing", "editing"]
 categories = ["encoding", "graphics", "multimedia", "visualization"]
 
 [lib]

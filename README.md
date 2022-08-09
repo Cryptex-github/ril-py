@@ -1,5 +1,5 @@
 # ril
-**R**ust **I**maging **L**ibrary: A high-level Rust imaging crate's python binding.
+**R**ust **I**maging **L**ibrary: A performant and high-level image processing library for Python written in Rust.
 
 ## What's this?
 This is a python binding around [ril](https://github.com/jay3332/ril) designed to provide an easy-to-use, high-level interface
@@ -13,15 +13,12 @@ By the first stable release, we plan to support the following image encodings:
 
 | Encoding Format | Current Status     |
 |-----------------|--------------------|
-| PNG\* (encoder) | Work in Progress   |
-| PNG\* (decoder) | Work in Progress   |
-| JPEG            | Not yet supported  |
-| GIF             | Not yet supported  |
+| PNG / APNG      |     Supported      |
+| JPEG            |     Supported      |
+| GIF             |     Supported      |
 | WebP            | Not yet supported  |
 | BMP             | Not yet supported  |
 | TIFF            | Not yet supported  |
-
-\* PNG encoding *does* account for APNG. (APNG is not yet supported)
 
 ## Installation
 
@@ -33,7 +30,6 @@ There will be prebuilt wheels for those platforms:
 * MacOS x86-64: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
 * Windows x86-64: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
 * Linux i686: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
-* Linux aarch64: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
 * MacOS aarch64: Cpython 3.8, 3.9, 3.10
 
 If you want another platform to have prebuilt wheels, please open an issue.
