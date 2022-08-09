@@ -13,7 +13,7 @@ use pyo3::{
 };
 use ril::{Banded, Dynamic, Image as RilImage, ImageFormat};
 
-/// Python representation of `ril::Image`
+/// The Image class
 #[pyclass]
 #[derive(Clone)]
 pub struct Image {
@@ -55,7 +55,24 @@ macro_rules! ensure_mode {
 #[pymethods]
 impl Image {
     /// Creates a new image with the given width and height, with all pixels being set intially to `fill`.
+    /// 
+    /// Parameters
+    /// ----------
+    /// width: int
+    ///     The width of the Image.
+    /// height: int
+    ///     The height of the Image.
+    /// fill: :class:`.Pixel`
+    ///     The pixel used to fill the image.
+    /// 
+    /// Example
+    /// -------
+    /// 
+    /// .. code-block:: python3
+    /// 
+    ///     Image.new(100, 100, Pixel.from_rgb(255, 255, 255))
     #[classmethod]
+    #[pyo3(text_signature = "(width: int, height: int, fill: Pixel)")]
     fn new(_: &PyType, width: u32, height: u32, fill: Pixel) -> Self {
         Self {
             inner: RilImage::new(width, height, fill.inner),
@@ -65,7 +82,19 @@ impl Image {
     /// Decodes an image with the explicitly given image encoding from the raw bytes.
     ///
     /// if `format` is not provided then it will try to infer its encoding.
+    /// 
+    /// Parameters
+    /// ----------
+    /// bytes: bytes
+    ///     The bytes of the Image.
+    /// format: Optional[str]
+    ///     The format of the image, defaults to `None`.
+    /// 
+    /// Errors
+    /// ------
+    /// Error if the image is not valid, or fails to infer the format if is not provided.
     #[classmethod]
+    #[pyo3(text_signature = "bytes: bytes, format: Optional[str] = None")]
     fn from_bytes(_: &PyType, bytes: &[u8], format: Option<&str>) -> Result<Self, Error> {
         Ok(if let Some(format) = format {
             Self {
@@ -80,7 +109,15 @@ impl Image {
 
     /// Creates a new image shaped with the given width
     /// and a 1-dimensional sequence of pixels which will be shaped according to the width.
+    /// 
+    /// Parameters
+    /// ----------
+    /// width: int
+    ///     The width of the image.
+    /// pixels: List[:class:`.Pixel`]
+    ///     A List of pixels.
     #[classmethod]
+    #[pyo3(text_signature = "width: int, pixels: List[Pixel]")]
     fn from_pixels(_: &PyType, width: u32, pixels: Vec<Pixel>) -> Self {
         Self {
             inner: RilImage::from_pixels(
