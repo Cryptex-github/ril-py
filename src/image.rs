@@ -13,7 +13,9 @@ use pyo3::{
 };
 use ril::{Banded, Dynamic, Image as RilImage, ImageFormat};
 
-/// The Image class
+/// A high-level image representation.
+/// 
+/// This represents a static, single-frame image. See :class:`.ImageSequence` for information on opening animated or multi-frame images.
 #[pyclass]
 #[derive(Clone)]
 pub struct Image {
@@ -150,6 +152,7 @@ impl Image {
     /// RuntimeError
     ///     Fails to infer file format or fails to decode image.
     #[classmethod]
+    #[pyo3(text_signature = "(path)")]
     fn open(_: &PyType, path: PathBuf) -> Result<Self, Error> {
         Ok(Self {
             inner: RilImage::open(path)?,
@@ -191,7 +194,7 @@ impl Image {
     /// -------
     /// (:class:`.L`, :class:`.L`, :class:`.L`)
     /// 
-    /// Errors
+    /// Raises
     /// ------
     /// TypeError
     ///     The image is not of mode `RGB` or `RGBA`.
@@ -274,6 +277,7 @@ impl Image {
     /// ----------
     /// entity: Union[:class:`.Rectangle`, :class:`.Ellipse`]
     ///     The entity to draw on the image.
+    #[pyo3(text_signature = "(entity)")]
     fn draw(&mut self, entity: DrawEntity) {
         entity.0.draw(&mut self.inner);
     }
@@ -346,6 +350,7 @@ impl Image {
     ///     The encoding provided is invalid.
     /// RuntimeError
     ///     Fails to encode the image or fails to infer the image format.
+    #[pyo3(text_signature = "(path, encoding = None)")]
     fn save(&self, path: PathBuf, encoding: Option<&str>) -> Result<(), Error> {
         if let Some(encoding) = encoding {
             let encoding = ImageFormat::from_extension(encoding)?;
@@ -385,6 +390,28 @@ impl Image {
             .collect::<Vec<Vec<PyObject>>>()
     }
 
+    /// Pastes the given image onto this image at the given x and y coordinates.
+    /// 
+    /// If `masked` is provided it will be masked with the given masking image.
+    /// 
+    /// Currently, only BitPixel images are supported for the masking image.
+    /// 
+    /// Parameters
+    /// ----------
+    /// x: int
+    ///     The x coordinate
+    /// y: int
+    ///     The y coordinate
+    /// image: :class:`Image`
+    ///     The image to paste.
+    /// mask: :class:`Image`, default: None
+    ///     The mask to use, defaults to `None`
+    /// 
+    /// Raises
+    /// ------
+    /// ValueError
+    ///     The mask provided is not of mode `BitPixel`
+    #[pyo3(text_signature = "(x, y, image, mask = None)")]
     fn paste(&mut self, x: u32, y: u32, image: Self, mask: Option<Self>) -> Result<(), Error> {
         if let Some(mask) = mask {
             if mask.mode() != "bitpixel" {
@@ -403,6 +430,22 @@ impl Image {
         Ok(())
     }
 
+    /// Masks the alpha values of this image with the luminance values of the given single-channel L image.
+    ///
+    /// If you want to mask using the alpha values of the image instead of providing an L image, you can split the bands of the image and extract the alpha band.
+    ///
+    /// This masking image must have the same dimensions as this image.
+    /// 
+    /// Parameters
+    /// ----------
+    /// mask: :class:`Image`
+    ///     The mask to use
+    /// 
+    /// Raises
+    /// ------
+    /// ValueError
+    ///     The mask provided is not of mode `L`
+    #[pyo3(text_signature = "(mask)")]
     fn mask_alpha(&mut self, mask: Self) -> Result<(), Error> {
         if mask.mode() != "L" {
             return Err(Error::UnexpectedFormat(
@@ -416,29 +459,34 @@ impl Image {
         Ok(())
     }
 
+    /// Mirrors, or flips this image horizontally (about the y-axis) in place.
     fn mirror(&mut self) {
         self.inner.mirror();
     }
 
+    /// Flips this image vertically (about the x-axis) in place.
     fn flip(&mut self) {
         self.inner.flip();
     }
 
-    /// Returns the encoding format of the image.
-    /// This is nothing more but metadata about the image.
-    /// When saving the image, you will still have to explicitly specify the encoding format.
+    /// str: Returns the encoding format of the image.
+    /// 
+    /// .. note::
+    ///     This is nothing more but metadata about the image.
+    ///     When saving the image, you will still have to explicitly specify the encoding format.
     #[getter]
     fn format(&self) -> String {
         format!("{}", self.inner.format())
     }
 
-    /// Returns the dimensions of the image.
+    /// (int, int): Returns the dimensions of the image.
     #[getter]
     fn dimensions(&self) -> (u32, u32) {
         self.inner.dimensions()
     }
 
-    /// Returns the pixel at the given coordinates.
+    /// Union[:class:`.BitPixel`, :class:`.L`, :class:`.Rgb`, :class:`.Rgba`]: Returns the pixel at the given coordinates.
+    #[pyo3(text_signature = "(x, y)")]
     fn get_pixel(&self, py: Python<'_>, x: u32, y: u32) -> PyObject {
         match *self.inner.pixel(x, y) {
             Dynamic::BitPixel(v) => BitPixel::from(v).into_py(py),
@@ -449,6 +497,16 @@ impl Image {
     }
 
     /// Sets the pixel at the given coordinates to the given pixel.
+    /// 
+    /// Paramters
+    /// ---------
+    /// x: int
+    ///     The x coordinate
+    /// y: int
+    ///     The y coordinate
+    /// pixel: :class:`.Pixel`
+    ///     The pixel to set it to
+    #[pyo3(text_signature = "(x, y, pixel)")]
     fn set_pixel(&mut self, x: u32, y: u32, pixel: Pixel) {
         self.inner.set_pixel(x, y, pixel.inner)
     }
