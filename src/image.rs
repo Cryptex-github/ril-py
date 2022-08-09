@@ -74,7 +74,7 @@ impl Image {
     /// 
     ///     Image.new(100, 100, Pixel.from_rgb(255, 255, 255))
     #[classmethod]
-    #[pyo3(text_signature = "(width, height, fill)")]
+    #[pyo3(text_signature = "(cls, width, height, fill)")]
     fn new(_: &PyType, width: u32, height: u32, fill: Pixel) -> Self {
         Self {
             inner: RilImage::new(width, height, fill.inner),
@@ -99,7 +99,7 @@ impl Image {
     /// RuntimeError
     ///     Raised if the image can't be decoded or the format is unknown.
     #[classmethod]
-    #[pyo3(text_signature = "(bytes, format = None)")]
+    #[pyo3(text_signature = "(cls, bytes, format = None)")]
     fn from_bytes(_: &PyType, bytes: &[u8], format: Option<&str>) -> Result<Self, Error> {
         Ok(if let Some(format) = format {
             Self {
@@ -122,7 +122,7 @@ impl Image {
     /// pixels: List[:class:`.Pixel`]
     ///     A List of pixels.
     #[classmethod]
-    #[pyo3(text_signature = "(width, pixels)")]
+    #[pyo3(text_signature = "(cls, width, pixels)")]
     fn from_pixels(_: &PyType, width: u32, pixels: Vec<Pixel>) -> Self {
         Self {
             inner: RilImage::from_pixels(
@@ -152,7 +152,7 @@ impl Image {
     /// RuntimeError
     ///     Fails to infer file format or fails to decode image.
     #[classmethod]
-    #[pyo3(text_signature = "(path)")]
+    #[pyo3(text_signature = "(cls, path)")]
     fn open(_: &PyType, path: PathBuf) -> Result<Self, Error> {
         Ok(Self {
             inner: RilImage::open(path)?,
@@ -221,11 +221,11 @@ impl Image {
     /// 
     /// Parameters
     /// ----------
-    /// bands: *:class:`.L`
+    /// bands: \*:class:`.L`
     ///     The bands of the image.
     #[classmethod]
     #[args(bands = "*")]
-    #[pyo3(text_signature = "(*bands)")]
+    #[pyo3(text_signature = "(self, *bands)")]
     fn from_bands(_: &PyType, bands: &PyTuple) -> PyResult<Self> {
         match bands.len() {
             3 => {
@@ -266,7 +266,7 @@ impl Image {
     ///     x2
     /// y2: int
     ///     y2
-    #[pyo3(text_signature = "(x1, y1, x2, y2)")]
+    #[pyo3(text_signature = "(self, x1, y1, x2, y2)")]
     fn crop(&mut self, x1: u32, y1: u32, x2: u32, y2: u32) {
         self.inner.crop(x1, y1, x2, y2);
     }
@@ -277,7 +277,7 @@ impl Image {
     /// ----------
     /// entity: Union[:class:`.Rectangle`, :class:`.Ellipse`]
     ///     The entity to draw on the image.
-    #[pyo3(text_signature = "(entity)")]
+    #[pyo3(text_signature = "(self, entity)")]
     fn draw(&mut self, entity: DrawEntity) {
         entity.0.draw(&mut self.inner);
     }
@@ -292,7 +292,7 @@ impl Image {
     ///     The target height to resize to
     /// algo: :class:`.ResizeAlgorithm`
     ///     The resize algorithm to use
-    #[pyo3(text_signature = "(width, height, algo)")]
+    #[pyo3(text_signature = "(self, width, height, algo)")]
     fn resize(&mut self, width: u32, height: u32, algo: ResizeAlgorithm) {
         self.inner.resize(width, height, algo.into());
     }
@@ -315,7 +315,7 @@ impl Image {
     ///     The encoding is invalid.
     /// RuntimeError
     ///     Fails to encode the image.
-    #[pyo3(text_signature = "(encoding)")]
+    #[pyo3(text_signature = "(self, encoding)")]
     fn encode(&self, encoding: &str) -> Result<&PyBytes, Error> {
         let encoding = ImageFormat::from_extension(encoding)?;
 
@@ -350,7 +350,7 @@ impl Image {
     ///     The encoding provided is invalid.
     /// RuntimeError
     ///     Fails to encode the image or fails to infer the image format.
-    #[pyo3(text_signature = "(path, encoding = None)")]
+    #[pyo3(text_signature = "(self, path, encoding = None)")]
     fn save(&self, path: PathBuf, encoding: Option<&str>) -> Result<(), Error> {
         if let Some(encoding) = encoding {
             let encoding = ImageFormat::from_extension(encoding)?;
@@ -411,7 +411,7 @@ impl Image {
     /// ------
     /// ValueError
     ///     The mask provided is not of mode `BitPixel`
-    #[pyo3(text_signature = "(x, y, image, mask = None)")]
+    #[pyo3(text_signature = "(self, x, y, image, mask = None)")]
     fn paste(&mut self, x: u32, y: u32, image: Self, mask: Option<Self>) -> Result<(), Error> {
         if let Some(mask) = mask {
             if mask.mode() != "bitpixel" {
@@ -445,7 +445,7 @@ impl Image {
     /// ------
     /// ValueError
     ///     The mask provided is not of mode `L`
-    #[pyo3(text_signature = "(mask)")]
+    #[pyo3(text_signature = "(self, mask)")]
     fn mask_alpha(&mut self, mask: Self) -> Result<(), Error> {
         if mask.mode() != "L" {
             return Err(Error::UnexpectedFormat(
@@ -486,7 +486,7 @@ impl Image {
     }
 
     /// Union[:class:`.BitPixel`, :class:`.L`, :class:`.Rgb`, :class:`.Rgba`]: Returns the pixel at the given coordinates.
-    #[pyo3(text_signature = "(x, y)")]
+    #[pyo3(text_signature = "(self, x, y)")]
     fn get_pixel(&self, py: Python<'_>, x: u32, y: u32) -> PyObject {
         match *self.inner.pixel(x, y) {
             Dynamic::BitPixel(v) => BitPixel::from(v).into_py(py),
@@ -506,7 +506,7 @@ impl Image {
     ///     The y coordinate
     /// pixel: :class:`.Pixel`
     ///     The pixel to set it to
-    #[pyo3(text_signature = "(x, y, pixel)")]
+    #[pyo3(text_signature = "(self, x, y, pixel)")]
     fn set_pixel(&mut self, x: u32, y: u32, pixel: Pixel) {
         self.inner.set_pixel(x, y, pixel.inner)
     }

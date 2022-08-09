@@ -40,8 +40,23 @@ fn from_border_position(position: RilBorderPosition) -> String {
 }
 
 /// Represents a shape border.
+/// 
+/// Parameters
+/// ----------
+/// color: :class:`.Pixel`
+///     The color of the border
+/// thickness: int
+///     The thickness of the border
+/// position: str
+///     The position of the border
+/// 
+/// Raises
+/// ------
+/// ValueError
+///     The position is not one of `inset`, `center`, or `outset`
 #[pyclass]
 #[derive(Clone)]
+#[pyo3(text_signature = "(color, thickness, position)")]
 pub struct Border {
     pub inner: RilBorder<Dynamic>,
 }
@@ -62,16 +77,19 @@ impl Border {
         })
     }
 
+    /// :class:`.Pixel`: The color of the border.
     #[getter]
     fn get_color(&self) -> Pixel {
         self.inner.color.into()
     }
 
+    /// int: The thickness of the border, in pixels.
     #[getter]
     fn get_thickness(&self) -> u32 {
         self.inner.thickness
     }
 
+    /// str: The position of the border.
     #[getter]
     fn get_border_position(&self) -> String {
         from_border_position(self.inner.position)
@@ -110,8 +128,34 @@ impl Display for Border {
     }
 }
 
+/// An ellipse, which could be a circle.
+/// 
+/// .. warning::
+///     Using any of the predefined constructors will automatically set the position to (0, 0) and you must explicitly set the size of the ellipse with `.size` in order to set a size for the ellipse. 
+///     A size must be set before drawing.
+/// 
+///     This also does not set any border or fill for the ellipse, you must explicitly set either one of them.
+/// 
+/// Paramters
+/// ---------
+/// position: (int, int)
+///     The position of the ellipse
+/// radii: (int, int)
+///     The radii of the ellipse
+/// border: Optional[:class:`.Border`]
+///     The border of the ellipse.
+/// fill: Optional[:class:`.Pixel`]
+///     The color to use for filling the Ellipse
+/// overlay: Optional[str]
+///     The overlay mode of the ellipse.
+/// 
+/// Raises
+/// ------
+/// ValueError
+///     The overlay mode provided is not one of `replace`, or `merge`
 #[pyclass]
 #[derive(Clone)]
+#[pyo3(text_signature = "(*, position, radii, border, fill, overlay)")]
 pub struct Ellipse {
     pub inner: RilEllipse<Dynamic>,
 }
@@ -146,30 +190,53 @@ impl Ellipse {
         Ok(Self { inner })
     }
 
+    /// Creates a new ellipse from the given bounding box.
+    /// 
+    /// Parameters
+    /// ----------
+    /// x1: int
+    /// y1: int
+    /// x2: int
+    /// y2: int
     #[classmethod]
+    #[pyo3(text_signature = "(cls, x1, y1, x2, y2)")]
     fn from_bounding_box(_: &PyType, x1: u32, y1: u32, x2: u32, y2: u32) -> Self {
         Self {
             inner: RilEllipse::from_bounding_box(x1, y1, x2, y2),
         }
     }
 
+    /// Creates a new circle with the given center position and radius.
+    /// 
+    /// Parameters
+    /// ----------
+    /// x: int
+    ///     The x coordinate
+    /// y: int
+    ///     The y coordinate
+    /// radius: int
+    ///     The radius
     #[classmethod]
+    #[pyo3(text_signature = "(cls, x, y, radius)")]
     fn circle(_: &PyType, x: u32, y: u32, radius: u32) -> Self {
         Self {
             inner: RilEllipse::circle(x, y, radius),
         }
     }
 
+    /// (int, int): The center position of the ellipse. The center of this ellipse will be rendered at this position.
     #[getter]
     fn get_position(&self) -> Xy {
         self.inner.position
     }
 
+    /// (int, int): The radii of the ellipse, in pixels; (horizontal, vertical).
     #[getter]
     fn get_radii(&self) -> Xy {
         self.inner.radii
     }
 
+    /// Optional[:class:`.Border`]: The border of the ellipse.
     #[getter]
     fn get_border(&self) -> Option<Border> {
         self.inner
@@ -178,6 +245,7 @@ impl Ellipse {
             .map(|b| Border { inner: b.clone() })
     }
 
+    /// Optional[Union[:class:`.BitPixel`, :class:`.L`, :class:`.Rgb`, :class:`.Rgba`]]: The color used to fill the ellipse.
     #[getter]
     fn get_fill(&self, py: Python<'_>) -> Option<PyObject> {
         self.inner
@@ -185,9 +253,37 @@ impl Ellipse {
             .map_or(None, |fill| Some(cast_pixel_to_pyobject(py, fill)))
     }
 
+    /// Optional[str]: The overlay mode of the ellipse.
     #[getter]
     fn get_overlay(&self) -> Option<String> {
         self.inner.overlay.map(|o| o.to_string())
+    }
+
+    #[setter]
+    fn set_position(&mut self, position: Xy) {
+        self.inner.position = position;
+    }
+
+    #[setter]
+    fn set_radii(&mut self, radii: Xy) {
+        self.inner.radii = radii;
+    }
+
+    #[setter]
+    fn set_border(&mut self, border: Border) {
+        self.inner.border = Some(border.inner);
+    }
+
+    #[setter]
+    fn set_fill(&mut self, fill: Pixel) {
+        self.inner.fill = Some(fill.inner);
+    }
+
+    #[setter]
+    fn set_overlay(&mut self, overlay: &str) -> PyResult<()> {
+        self.inner.overlay = Some(cast_overlay(overlay)?);
+
+        Ok(())
     }
 
     fn __repr__(&self, py: Python<'_>) -> String {

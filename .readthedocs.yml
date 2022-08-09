@@ -11,6 +11,8 @@ build:
     python: "3"
     rust: "1.61"
 
+formats: all
+
 python:
   install:
     - method: pip
