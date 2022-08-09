@@ -18,4 +18,11 @@ class Image:
 
 
 class Pixel:
-    ...
+    """
+    A Pixel type
+    """
+    @classmethod
+    def from_bitpixel(cls: Type[Pixel], value: bool) -> Pixel:
+        """
+        Create a BitPixel
+        """
