@@ -13,3 +13,5 @@ Cargo.lock
 **/*.pyd
 **/ril.egg-info
 venv/
+
+**.pyc
