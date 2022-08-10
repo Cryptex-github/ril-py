@@ -211,9 +211,9 @@ impl Ellipse {
     /// Parameters
     /// ----------
     /// x: int
-    ///     The x coordinate
+    ///     The x axis
     /// y: int
-    ///     The y coordinate
+    ///     The y axis
     /// radius: int
     ///     The radius
     #[classmethod]

@@ -390,7 +390,7 @@ impl Image {
             .collect::<Vec<Vec<PyObject>>>()
     }
 
-    /// Pastes the given image onto this image at the given x and y coordinates.
+    /// Pastes the given image onto this image at the given x and y axiss.
     /// 
     /// If `maske` is provided it will be masked with the given masking image.
     /// 
@@ -399,9 +399,9 @@ impl Image {
     /// Parameters
     /// ----------
     /// x: int
-    ///     The x coordinate
+    ///     The x axis
     /// y: int
-    ///     The y coordinate
+    ///     The y axis
     /// image: :class:`Image`
     ///     The image to paste.
     /// mask: Optional[:class:`Image`], default: None
@@ -490,9 +490,9 @@ impl Image {
     /// Parameters
     /// ----------
     /// x: int
-    ///     The x coordinate
+    ///     The x axis
     /// y: int
-    ///     The y coordinate
+    ///     The y axis
     /// 
     /// Returns
     /// -------
@@ -513,9 +513,9 @@ impl Image {
     /// Parameters
     /// ---------
     /// x: int
-    ///     The x coordinate
+    ///     The x axis
     /// y: int
-    ///     The y coordinate
+    ///     The y axis
     /// pixel: :class:`.Pixel`
     ///     The pixel to set it to
     #[pyo3(text_signature = "(self, x, y, pixel)")]
