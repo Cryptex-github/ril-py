@@ -70,8 +70,7 @@ jobs:
     - name: build sdist
       if: matrix.os == 'ubuntu' && matrix.python-version == 'cp38'
       run: |
-        pip install -U setuptools-rust
-        python setup.py sdist -d wheelhouse
+        maturin sdist -o wheelhouse
 
     - name: build ${{ matrix.platform || matrix.os }} binaries
       run: cibuildwheel --output-dir wheelhouse
