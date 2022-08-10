@@ -68,7 +68,7 @@ impl Image {
     ///     The pixel used to fill the image.
     /// 
     /// Examples
-    /// -------
+    /// --------
     /// 
     /// .. code-block:: python3
     /// 

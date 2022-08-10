@@ -80,7 +80,7 @@ impl Frame {
 /// 
 /// The iterator does not loop, so when you iterate through :class:`.ImageSequence` like
 /// 
-/// .. code-block: python3
+/// .. code-block:: python3
 /// 
 ///     seq = ImageSequence.from_bytes(bytes)
 ///     list(seq) # [...]
