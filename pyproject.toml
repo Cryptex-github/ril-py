@@ -1,6 +1,6 @@
 [project]
 name = "pyril"
-version = "0.2.1.post4"
+version = "0.2.1.post5"
 license = { text = "MIT" }
 authors = [ { name = "Cryptex" } ]
 requires-python = ">=3.7"
