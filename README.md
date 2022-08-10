@@ -48,7 +48,7 @@ In order to build from source, you will need to have the Rust compiler available
 Then building is as simple as
 
 ```
-pip install ril
+pip install ril-py
 ```
 
 or from Github
