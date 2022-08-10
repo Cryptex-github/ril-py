@@ -137,19 +137,26 @@ impl Pixel {
         }
     }
 
-    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyResult<PyObject> {
+    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyObject {
         match op {
             CompareOp::Eq => {
-                let other = other.extract::<Self>(py)?;
-                let val = self == &other;
-                Ok(val.into_py(py))
+                let other = other.extract::<Self>(py);
+                if let Ok(other) = other {
+                    let val = self == &other;
+                    val.into_py(py)
+                } else {
+                    false.into_py(py)
+                }
             }
             CompareOp::Ne => {
-                let other = other.extract::<Self>(py)?;
-                let val = self != &other;
-                Ok(val.into_py(py))
+                if let Ok(other) = other.extract::<Self>(py) {
+                    let val = self != &other;
+                    val.into_py(py)
+                } else {
+                    true.into_py(py)
+                }
             }
-            _ => Ok(py.NotImplemented()),
+            _ => py.NotImplemented(),
         }
     }
 
@@ -178,19 +185,26 @@ impl BitPixel {
         Self { value }
     }
 
-    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyResult<PyObject> {
+    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyObject {
         match op {
             CompareOp::Eq => {
-                let other = other.extract::<Self>(py)?;
-                let val = self == &other;
-                Ok(val.into_py(py))
+                let other = other.extract::<Self>(py);
+                if let Ok(other) = other {
+                    let val = self == &other;
+                    val.into_py(py)
+                } else {
+                    false.into_py(py)
+                }
             }
             CompareOp::Ne => {
-                let other = other.extract::<Self>(py)?;
-                let val = self != &other;
-                Ok(val.into_py(py))
+                if let Ok(other) = other.extract::<Self>(py) {
+                    let val = self != &other;
+                    val.into_py(py)
+                } else {
+                    true.into_py(py)
+                }
             }
-            _ => Ok(py.NotImplemented()),
+            _ => py.NotImplemented(),
         }
     }
 
@@ -206,19 +220,26 @@ impl L {
         Self { value }
     }
 
-    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyResult<PyObject> {
+    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyObject {
         match op {
             CompareOp::Eq => {
-                let other = other.extract::<Self>(py)?;
-                let val = self == &other;
-                Ok(val.into_py(py))
+                let other = other.extract::<Self>(py);
+                if let Ok(other) = other {
+                    let val = self == &other;
+                    val.into_py(py)
+                } else {
+                    false.into_py(py)
+                }
             }
             CompareOp::Ne => {
-                let other = other.extract::<Self>(py)?;
-                let val = self != &other;
-                Ok(val.into_py(py))
+                if let Ok(other) = other.extract::<Self>(py) {
+                    let val = self != &other;
+                    val.into_py(py)
+                } else {
+                    true.into_py(py)
+                }
             }
-            _ => Ok(py.NotImplemented()),
+            _ => py.NotImplemented(),
         }
     }
 
@@ -234,19 +255,26 @@ impl Rgb {
         Self { r, g, b }
     }
 
-    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyResult<PyObject> {
+    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyObject {
         match op {
             CompareOp::Eq => {
-                let other = other.extract::<Self>(py)?;
-                let val = self == &other;
-                Ok(val.into_py(py))
+                let other = other.extract::<Self>(py);
+                if let Ok(other) = other {
+                    let val = self == &other;
+                    val.into_py(py)
+                } else {
+                    false.into_py(py)
+                }
             }
             CompareOp::Ne => {
-                let other = other.extract::<Self>(py)?;
-                let val = self != &other;
-                Ok(val.into_py(py))
+                if let Ok(other) = other.extract::<Self>(py) {
+                    let val = self != &other;
+                    val.into_py(py)
+                } else {
+                    true.into_py(py)
+                }
             }
-            _ => Ok(py.NotImplemented()),
+            _ => py.NotImplemented(),
         }
     }
 
@@ -262,24 +290,31 @@ impl Rgba {
         Self { r, g, b, a }
     }
 
-    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyResult<PyObject> {
+    fn __richcmp__(&self, py: Python<'_>, other: PyObject, op: CompareOp) -> PyObject {
         match op {
             CompareOp::Eq => {
-                let other = other.extract::<Self>(py)?;
-                let val = self == &other;
-                Ok(val.into_py(py))
+                let other = other.extract::<Self>(py);
+                if let Ok(other) = other {
+                    let val = self == &other;
+                    val.into_py(py)
+                } else {
+                    false.into_py(py)
+                }
             }
             CompareOp::Ne => {
-                let other = other.extract::<Self>(py)?;
-                let val = self != &other;
-                Ok(val.into_py(py))
+                if let Ok(other) = other.extract::<Self>(py) {
+                    let val = self != &other;
+                    val.into_py(py)
+                } else {
+                    true.into_py(py)
+                }
             }
-            _ => Ok(py.NotImplemented()),
+            _ => py.NotImplemented(),
         }
     }
 
     fn __repr__(&self) -> String {
-        format!("<Rgb r={} g={} b={} a={}>", self.r, self.g, self.b, self.a)
+        format!("<Rgba r={} g={} b={} a={}>", self.r, self.g, self.b, self.a)
     }
 }
 

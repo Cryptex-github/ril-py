@@ -1,6 +1,22 @@
 # type: ignore
 
 import ril
+from ril import Rgba
+
+PIXELS = [
+    Rgba(255, 0, 0, 255),
+    Rgba(255, 128, 0, 255),
+    Rgba(255, 255, 0, 255),
+    Rgba(128, 255, 0, 255),
+    Rgba(0, 255, 0, 255),
+    Rgba(0, 255, 128, 255),
+    Rgba(0, 255, 255, 255),
+    Rgba(0, 128, 255, 255),
+    Rgba(0, 0, 255, 255),
+    Rgba(128, 0, 255, 255),
+    Rgba(255, 0, 255, 255),
+    Rgba(255, 0, 128, 255),
+]
 
 def test_create_image() -> None:
     image = ril.Image.new(1, 1, ril.Pixel.from_rgb(255, 255, 255))
@@ -13,3 +29,10 @@ def test_image_pixels() -> None:
     image = ril.Image.new(1, 1, ril.Pixel.from_rgb(255, 255, 255))
 
     image.pixels()
+
+def test_gif_decode() -> None:
+    for i, frame in enumerate(ril.ImageSequence.open('test/sample.gif')):
+        frame = frame.image
+
+        assert frame.dimensions == (256, 256)
+        assert frame.get_pixel(0, 0) == PIXELS[i]
