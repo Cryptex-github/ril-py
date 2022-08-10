@@ -70,8 +70,8 @@ jobs:
     - name: build sdist
       if: matrix.os == 'ubuntu' && matrix.python-version == 'cp38'
       run: |
-        pip install maturin
-        maturin sdist -o wheelhouse
+        pip install maturin build
+        py -m build --sdist
 
     - name: build ${{ matrix.platform || matrix.os }} binaries
       run: cibuildwheel --output-dir wheelhouse
