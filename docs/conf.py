@@ -32,6 +32,8 @@ extensions = [
     'sphinx.ext.extlinks',
     'sphinx.ext.intersphinx',
     'sphinx.ext.napoleon',
+    'sphinxext.opengraph',
+    'sphinx_copybutton',
 ]
 
 autodoc_typehints = 'both'

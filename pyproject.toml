@@ -13,7 +13,9 @@ homepage = "https://github.com/Cryptex-github/ril-py"
 [project.optional-dependencies]
 docs = [
     "sphinx",
-    "furo"
+    "furo",
+    "sphinxext-opengraph",
+    "pip install sphinx-copybutton"
 ]
 
 [build-system]
