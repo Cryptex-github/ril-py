@@ -39,7 +39,7 @@ CPython 3.11 support will be available once its ABI has been stablized.
 If your platform have prebuilt wheels, installing is as simple as
 
 ```
-pip install ril
+pip install pyril
 ```
 
 ### Building from Source
@@ -48,13 +48,13 @@ In order to build from source, you will need to have the Rust compiler available
 Then building is as simple as
 
 ```
-pip install ril-py
+pip install pyril
 ```
 
 or from Github
 
 ```
-pip install git+https://github.com/Cryptex-github/ril-py
+pip install git+https://github.com/Cryptex-github/pyril
 ```
 
 Pip will handle the building process.
