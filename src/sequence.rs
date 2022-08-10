@@ -78,7 +78,7 @@ impl Frame {
 /// 
 /// See :class:`.Image` for the static image counterpart, and see :class:`.Frame` to see how each frame is represented in an image sequence.
 /// 
-/// The iterator does not loop, so when you iterate through :class:`.ImageSequence` like
+/// The iterator is exhausive, so when you iterate through :class:`.ImageSequence` like
 /// 
 /// .. code-block:: python3
 /// 
@@ -89,7 +89,7 @@ impl Frame {
 ///     # It will return a empty list
 /// 
 /// .. note::
-///     This class is immutable, so you must create a new :class:`.ImageSequence` after you made change to the frames.
+///     Any change made to the :class:`.Frame` will not be reflected to the :class:`.ImageSequence`, so you must create a new :class:`.ImageSequence` after you make changes to the frames.
 #[pyclass]
 pub struct ImageSequence {
     inner: RilImageSequence<Dynamic>,
@@ -114,7 +114,7 @@ impl ImageSequence {
     /// ValueError
     ///     The format provided is invalid.
     /// RuntimeError
-    ///     Fails to decode the image or fails to infer the image's format.
+    ///     Failed to decode the image or Failed to infer the image's format.
     #[classmethod]
     #[pyo3(text_signature = "(cls, bytes, format)")]
     fn from_bytes(_: &PyType, bytes: &[u8], format: Option<&str>) -> Result<Self, Error> {
@@ -165,7 +165,7 @@ impl ImageSequence {
     /// ValueError
     ///     The file extension is invalid.
     /// RuntimeError
-    ///     Fails to infer file format or fails to decode image.
+    ///     Failed to infer file format or Failed to decode image.
     #[classmethod]
     #[pyo3(text_signature = "(cls, path)")]
     fn open(_: &PyType, path: PathBuf) -> Result<Self, Error> {
@@ -219,7 +219,7 @@ impl ImageSequence {
     /// ValueError
     ///     The file extension is invalid.
     /// RuntimeError
-    ///     Fails to infer file format or fails to decode image.
+    ///     Failed to infer file format or Failed to decode image.
     fn save(&self, path: PathBuf, encoding: Option<&str>) -> Result<(), Error> {
         if let Some(encoding) = encoding {
             let encoding = ImageFormat::from_extension(encoding)?;

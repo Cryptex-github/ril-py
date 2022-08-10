@@ -17,7 +17,7 @@ Image
 Pixel
 -----
 
-There are two pixel type.
+There are two pixel types.
 
 :class:`Pixel` and other pixel classes.
 
@@ -93,11 +93,11 @@ Enums
 
         A simple nearest neighbor algorithm. Although the fastest, this gives the lowest quality resizings.
         
-        When upscaling this is good if you want a “pixelated” effect with no aliasing. 
+        When upscaling this is good if you want a "pixelated" effect with no aliasing. 
         
     .. attribute:: Box
 
-        A box filter algorithm. Equivalent to the [Nearest] filter if you are upscaling.
+        A box filter algorithm. Equivalent to the :attr:`Nearest` filter if you are upscaling.
     
     .. attribute:: Bilinear
 
@@ -105,7 +105,7 @@ Enums
     
     .. attribute:: Hamming
 
-        While having similar performance as the [Bilinear] filter, this produces a sharper and usually considered better quality image than the [Bilinear] filter, but only when downscaling. This may give worse results than bilinear when upscaling.
+        While having similar performance as the :attr:`Bilinear` filter, this produces a sharper and usually considered better quality image than the :attr:`Bilinear` filter, but only when downscaling. This may give worse results than bilinear when upscaling.
     
     .. attribute:: Bicubic
 

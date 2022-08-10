@@ -150,7 +150,7 @@ impl Image {
     /// ValueError
     ///     The file extension is invalid.
     /// RuntimeError
-    ///     Fails to infer file format or fails to decode image.
+    ///     Failed to infer file format or Failed to decode image.
     #[classmethod]
     #[pyo3(text_signature = "(cls, path)")]
     fn open(_: &PyType, path: PathBuf) -> Result<Self, Error> {
@@ -192,7 +192,7 @@ impl Image {
     /// 
     /// Returns
     /// -------
-    /// (:class:`.L`, :class:`.L`, :class:`.L`)
+    /// Tuple[:class:`.L`, ...]
     /// 
     /// Raises
     /// ------
@@ -221,7 +221,7 @@ impl Image {
     /// 
     /// Parameters
     /// ----------
-    /// bands: \*:class:`.L`
+    /// bands: \* :class:`.L`
     ///     The bands of the image.
     #[classmethod]
     #[args(bands = "*")]
@@ -314,7 +314,7 @@ impl Image {
     /// ValueError
     ///     The encoding is invalid.
     /// RuntimeError
-    ///     Fails to encode the image.
+    ///     Failed to encode the image.
     #[pyo3(text_signature = "(self, encoding)")]
     fn encode(&self, encoding: &str) -> Result<&PyBytes, Error> {
         let encoding = ImageFormat::from_extension(encoding)?;
@@ -349,7 +349,7 @@ impl Image {
     /// ValueError
     ///     The encoding provided is invalid.
     /// RuntimeError
-    ///     Fails to encode the image or fails to infer the image format.
+    ///     Failed to encode the image or Failed to infer the image format.
     #[pyo3(text_signature = "(self, path, encoding = None)")]
     fn save(&self, path: PathBuf, encoding: Option<&str>) -> Result<(), Error> {
         if let Some(encoding) = encoding {
@@ -362,7 +362,7 @@ impl Image {
         Ok(())
     }
 
-    /// Returns a list of list representing the pixels of the image. Each list in the list is a row.
+    /// Returns a 2D list representing the pixels of the image. Each list in the list is a row.
     ///
     /// For example:
     ///
@@ -392,7 +392,7 @@ impl Image {
 
     /// Pastes the given image onto this image at the given x and y coordinates.
     /// 
-    /// If `masked` is provided it will be masked with the given masking image.
+    /// If `maske` is provided it will be masked with the given masking image.
     /// 
     /// Currently, only BitPixel images are supported for the masking image.
     /// 
@@ -404,7 +404,7 @@ impl Image {
     ///     The y coordinate
     /// image: :class:`Image`
     ///     The image to paste.
-    /// mask: :class:`Image`, default: None
+    /// mask: Optional[:class:`Image`], default: None
     ///     The mask to use, defaults to `None`
     /// 
     /// Raises
@@ -485,7 +485,19 @@ impl Image {
         self.inner.dimensions()
     }
 
-    /// Union[:class:`.BitPixel`, :class:`.L`, :class:`.Rgb`, :class:`.Rgba`]: Returns the pixel at the given coordinates.
+    /// Returns the pixel at the given coordinates.
+    /// 
+    /// Parameters
+    /// ----------
+    /// x: int
+    ///     The x coordinate
+    /// y: int
+    ///     The y coordinate
+    /// 
+    /// Returns
+    /// -------
+    /// Union[:class:`.BitPixel`, :class:`.L`, :class:`.Rgb`, :class:`.Rgba`]
+    ///     The pixel of that specific coordinate.
     #[pyo3(text_signature = "(self, x, y)")]
     fn get_pixel(&self, py: Python<'_>, x: u32, y: u32) -> PyObject {
         match *self.inner.pixel(x, y) {
