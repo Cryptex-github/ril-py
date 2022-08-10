@@ -68,7 +68,7 @@ jobs:
       run: pip install -U setuptools wheel twine cibuildwheel
 
     - name: build sdist
-      if: matrix.os == 'ubuntu' && matrix.python-version == '8'
+      if: matrix.os == 'ubuntu' && matrix.python-version == 'cp38'
       run: |
         pip install -U setuptools-rust
         python setup.py sdist -d wheelhouse
