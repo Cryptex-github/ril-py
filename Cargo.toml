@@ -1,12 +1,12 @@
 [package]
-name = "pyril"
+name = "ril-py"
 authors = ["Cryptex"]
 version = "0.2.1"
 license = "MIT"
 edition = "2021"
 description = "Rust Imaging Library's Python binding: A performant and high-level image processing library for Python written in Rust"
-repository = "https://github.com/Cryptex-github/pyril"
-homepage = "https://github.com/Cryptex-github/pyril"
+repository = "https://github.com/Cryptex-github/ril-py"
+homepage = "https://github.com/Cryptex-github/ril-py"
 readme = "README.md"
 keywords = ["ril", "imaging", "image", "processing", "editing"]
 categories = ["encoding", "graphics", "multimedia", "visualization"]

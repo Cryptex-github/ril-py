@@ -22,6 +22,10 @@ By the first stable release, we plan to support the following image encodings:
 
 ## Installation
 
+**This package is published to pypi under the name `pyril` due to a pypi limitation.
+
+It will be published under `ril` in the future, if possible.
+
 ### Prebuilt wheels
 
 There will be prebuilt wheels for those platforms:
@@ -54,7 +58,7 @@ pip install pyril
 or from Github
 
 ```
-pip install git+https://github.com/Cryptex-github/pyril
+pip install git+https://github.com/Cryptex-github/ril-py
 ```
 
 Pip will handle the building process.
