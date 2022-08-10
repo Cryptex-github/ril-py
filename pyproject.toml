@@ -15,7 +15,7 @@ docs = [
     "sphinx",
     "furo",
     "sphinxext-opengraph",
-    "pip install sphinx-copybutton"
+    "sphinx-copybutton"
 ]
 
 [build-system]
