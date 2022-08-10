@@ -90,6 +90,7 @@ Enums
     A filtering algorithm that is used to resize an image.
     
     .. attribute:: Nearest
+
         A simple nearest neighbor algorithm. Although the fastest, this gives the lowest quality resizings.
         
         When upscaling this is good if you want a “pixelated” effect with no aliasing. 
@@ -115,4 +116,5 @@ Enums
         A Mitchell-Netravali bicubic filter. Just like all cubic filters, it uses cubic interpolation on all pixels to calculate output pixels.
     
     .. attribute:: Lanczos3
+
         A Lanczos filter with a window of 3. Calculates output pixel value using a high-quality Lanczos filter on all pixels.

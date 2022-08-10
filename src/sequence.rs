@@ -81,11 +81,15 @@ impl Frame {
 /// The iterator does not loop, so when you iterate through :class:`.ImageSequence` like
 /// 
 /// .. code-block: python3
+/// 
 ///     seq = ImageSequence.from_bytes(bytes)
 ///     list(seq) # [...]
 ///     # But if you do it again
 ///     list(seq) # []
 ///     # It will return a empty list
+/// 
+/// .. note::
+///     This class is immutable, so you must create a new :class:`.ImageSequence` after you made change to the frames.
 #[pyclass]
 pub struct ImageSequence {
     inner: RilImageSequence<Dynamic>,
@@ -97,9 +101,6 @@ impl ImageSequence {
     /// Decodes a sequence with the explicitly given image encoding from the raw bytes.
     ///
     /// if `format` is not provided then it will try to infer its encoding.
-    /// 
-    /// .. note::
-    ///     This class is immutable, so you must create a new :class:`.ImageSequence` after you made change to the frames.
     /// 
     /// Parameters
     /// ----------
