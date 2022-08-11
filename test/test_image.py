@@ -30,7 +30,7 @@ def test_image_pixels() -> None:
     image.pixels()
 
 def test_gif_decode(fetch_file) -> None:
-    for i, frame in enumerate(ril.ImageSequence.from_bytes(fetch_file('sample.gif'))):
+    for i, frame in enumerate(ril.ImageSequence.from_bytes(fetch_file('sample_rgba.gif'))):
         frame = frame.image
 
         assert frame.dimensions == (256, 256)
