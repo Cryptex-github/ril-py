@@ -14,7 +14,7 @@ use pyo3::{
 use ril::{Banded, Dynamic, Image as RilImage, ImageFormat};
 
 /// A high-level image representation.
-/// 
+///
 /// This represents a static, single-frame image. See :class:`.ImageSequence` for information on opening animated or multi-frame images.
 #[pyclass]
 #[derive(Clone)]
@@ -57,7 +57,7 @@ macro_rules! ensure_mode {
 #[pymethods]
 impl Image {
     /// Creates a new image with the given width and height, with all pixels being set intially to `fill`.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// width: int
@@ -66,12 +66,12 @@ impl Image {
     ///     The height of the Image.
     /// fill: :class:`.Pixel`
     ///     The pixel used to fill the image.
-    /// 
+    ///
     /// Examples
     /// --------
-    /// 
+    ///
     /// .. code-block:: python3
-    /// 
+    ///
     ///     Image.new(100, 100, Pixel.from_rgb(255, 255, 255))
     #[classmethod]
     #[pyo3(text_signature = "(cls, width, height, fill)")]
@@ -84,14 +84,14 @@ impl Image {
     /// Decodes an image with the explicitly given image encoding from the raw bytes.
     ///
     /// if `format` is not provided then it will try to infer its encoding.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// bytes: bytes
     ///     The bytes of the Image.
     /// format: Optional[str], default: None
     ///     The format of the image, defaults to `None`.
-    /// 
+    ///
     /// Raises
     /// ------
     /// ValueError
@@ -114,7 +114,7 @@ impl Image {
 
     /// Creates a new image shaped with the given width
     /// and a 1-dimensional sequence of pixels which will be shaped according to the width.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// width: int
@@ -139,12 +139,12 @@ impl Image {
     ///
     /// The encoding of the image is automatically inferred.
     /// You can explicitly pass in an encoding by using the :meth:`from_bytes` method.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// path: str
     ///     The path to the image.
-    /// 
+    ///
     /// Raises
     /// ------
     /// ValueError
@@ -189,11 +189,11 @@ impl Image {
     }
 
     /// Return the bands of the image.
-    /// 
+    ///
     /// Returns
     /// -------
     /// Tuple[:class:`.L`, ...]
-    /// 
+    ///
     /// Raises
     /// ------
     /// TypeError
@@ -218,7 +218,7 @@ impl Image {
     }
 
     /// Creates a new image from the given bands.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// bands: \* :class:`.L`
@@ -255,7 +255,7 @@ impl Image {
     }
 
     /// Crops this image in place to the given bounding box.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// x1: int
@@ -272,7 +272,7 @@ impl Image {
     }
 
     /// Draws an object or shape onto this image.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// entity: Union[:class:`.Rectangle`, :class:`.Ellipse`]
@@ -283,7 +283,7 @@ impl Image {
     }
 
     /// Resizes this image in place to the given dimensions using the given resizing algorithm in place.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// width: int
@@ -298,17 +298,17 @@ impl Image {
     }
 
     /// Encodes the image with the given encoding and returns `bytes`.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// encoding: str
     ///     The encoding of the image.
-    /// 
+    ///
     /// Returns
     /// -------
     /// bytes
     ///     The encoded bytes of the image.
-    /// 
+    ///
     /// Raises
     /// ------
     /// ValueError
@@ -336,14 +336,14 @@ impl Image {
     /// Saves the image to the given path.
     /// If encoding is not provided, it will attempt to infer it by the path/filename's extension
     /// You can try saving to a memory buffer by using the :meth:`encode` method.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// path: str
     ///     The path to save the image to.
     /// encoding: Optional[str], default: None
     ///     The encoding of the image, defaults to `None`.
-    /// 
+    ///
     /// Raises
     /// ------
     /// ValueError
@@ -373,7 +373,7 @@ impl Image {
     /// .. warning:: **This function involves heavy operation**
     ///
     ///     This function requires multiple iterations, so it is a heavy operation for larger image.
-    /// 
+    ///
     /// Returns
     /// -------
     /// List[List[Union[:class:`.BitPixel`, :class:`.L`, :class:`.Rgb`, :class:`.Rgba`]]]
@@ -391,11 +391,11 @@ impl Image {
     }
 
     /// Pastes the given image onto this image at the given x and y axiss.
-    /// 
+    ///
     /// If `maske` is provided it will be masked with the given masking image.
-    /// 
+    ///
     /// Currently, only BitPixel images are supported for the masking image.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// x: int
@@ -406,7 +406,7 @@ impl Image {
     ///     The image to paste.
     /// mask: Optional[:class:`Image`], default: None
     ///     The mask to use, defaults to `None`
-    /// 
+    ///
     /// Raises
     /// ------
     /// ValueError
@@ -435,12 +435,12 @@ impl Image {
     /// If you want to mask using the alpha values of the image instead of providing an L image, you can split the bands of the image and extract the alpha band.
     ///
     /// This masking image must have the same dimensions as this image.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// mask: :class:`Image`
     ///     The mask to use
-    /// 
+    ///
     /// Raises
     /// ------
     /// ValueError
@@ -470,7 +470,7 @@ impl Image {
     }
 
     /// str: Returns the encoding format of the image.
-    /// 
+    ///
     /// .. note::
     ///     This is nothing more but metadata about the image.
     ///     When saving the image, you will still have to explicitly specify the encoding format.
@@ -486,14 +486,14 @@ impl Image {
     }
 
     /// Returns the pixel at the given coordinates.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// x: int
     ///     The x axis
     /// y: int
     ///     The y axis
-    /// 
+    ///
     /// Returns
     /// -------
     /// Union[:class:`.BitPixel`, :class:`.L`, :class:`.Rgb`, :class:`.Rgba`]
@@ -509,7 +509,7 @@ impl Image {
     }
 
     /// Sets the pixel at the given coordinates to the given pixel.
-    /// 
+    ///
     /// Parameters
     /// ---------
     /// x: int

@@ -1,5 +1,4 @@
 #![allow(clippy::missing_const_for_fn)]
-
 // Warnings created by pyo3
 #![allow(clippy::used_underscore_binding)]
 #![allow(clippy::borrow_deref_ref)]

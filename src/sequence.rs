@@ -11,7 +11,7 @@ use ril::{
 use crate::{error::Error, image::Image, types::DisposalMethod, Xy};
 
 /// Represents a frame in an image sequence. It encloses :class:`.Image` and extra metadata about the frame.
-/// 
+///
 /// Parameters
 /// ----------
 /// image: :class:`.Image`
@@ -75,19 +75,19 @@ impl Frame {
 }
 
 /// Represents a sequence of image frames such as an animated image.
-/// 
+///
 /// See :class:`.Image` for the static image counterpart, and see :class:`.Frame` to see how each frame is represented in an image sequence.
-/// 
+///
 /// The iterator is exhausive, so when you iterate through :class:`.ImageSequence` like
-/// 
+///
 /// .. code-block:: python3
-/// 
+///
 ///     seq = ImageSequence.from_bytes(bytes)
 ///     list(seq) # [...]
 ///     # But if you do it again
 ///     list(seq) # []
 ///     # It will return a empty list
-/// 
+///
 /// .. note::
 ///     Any change made to the :class:`.Frame` will not be reflected to the :class:`.ImageSequence`, so you must create a new :class:`.ImageSequence` after you make changes to the frames.
 #[pyclass]
@@ -101,14 +101,14 @@ impl ImageSequence {
     /// Decodes a sequence with the explicitly given image encoding from the raw bytes.
     ///
     /// if `format` is not provided then it will try to infer its encoding.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// bytes: bytes
     ///     The bytes of the image.
     /// format: Optional[str], default: None
     ///     The format of the image.
-    /// 
+    ///
     /// Raises
     /// ------
     /// ValueError
@@ -136,7 +136,7 @@ impl ImageSequence {
     }
 
     /// Creates a new image sequence from the given frames
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// frames: List[:class:`Frame`]
@@ -154,12 +154,12 @@ impl ImageSequence {
     ///
     /// The encoding of the image is automatically inferred.
     /// You can explicitly pass in an encoding by using the :meth:`from_bytes` method.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// path: str
     ///     The path to the image.
-    /// 
+    ///
     /// Raises
     /// ------
     /// ValueError
@@ -171,19 +171,16 @@ impl ImageSequence {
     fn open(_: &PyType, path: PathBuf) -> Result<Self, Error> {
         let inner = RilImageSequence::open(path)?.into_sequence()?;
         let iter = Box::new(inner.clone().into_iter());
-        Ok(Self {
-            inner,
-            iter
-        })
+        Ok(Self { inner, iter })
     }
 
     /// Encodes the image with the given encoding and returns `bytes`.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// encoding: str
     ///     The encoding to encode to.
-    /// 
+    ///
     /// Returns
     /// -------
     /// bytes
@@ -208,12 +205,12 @@ impl ImageSequence {
     /// Saves the image to the given path.
     /// If encoding is not provided, it will attempt to infer it by the path/filename's extension
     /// You can try saving to a memory buffer by using the :meth:`encode` method.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// path: str
     ///     The path to the image.
-    /// 
+    ///
     /// Raises
     /// ------
     /// ValueError

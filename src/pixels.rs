@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use pyo3::{prelude::*, types::PyType, pyclass::CompareOp};
+use pyo3::{prelude::*, pyclass::CompareOp, types::PyType};
 use ril::Dynamic;
 
 /// Represents a single-bit pixel that represents either a pixel that is on or off.
@@ -12,8 +12,8 @@ pub struct BitPixel {
     value: bool,
 }
 
-/// Represents an L, or luminance pixel that is stored as only one single number representing how bright, or intense, the pixel is. 
-/// 
+/// Represents an L, or luminance pixel that is stored as only one single number representing how bright, or intense, the pixel is.
+///
 /// This can be thought of as the “unit channel” as this represents only a single channel in which other pixel types can be composed of.
 #[pyclass]
 #[derive(Clone, Eq, PartialEq)]
@@ -72,7 +72,7 @@ impl From<Dynamic> for Pixel {
 #[pymethods]
 impl Pixel {
     /// Create a bitpixel.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// value: bool
@@ -84,9 +84,9 @@ impl Pixel {
             inner: Dynamic::BitPixel(ril::BitPixel(value)),
         }
     }
-    
+
     /// Create a L Pixel.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// value: int
@@ -100,7 +100,7 @@ impl Pixel {
     }
 
     /// Creates a Rgb Pixel
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// r: int
@@ -118,7 +118,7 @@ impl Pixel {
     }
 
     /// Creates a Rgba Pixel
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// r: int

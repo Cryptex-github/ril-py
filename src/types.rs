@@ -58,7 +58,6 @@ impl From<ResizeAlgorithm> for ril::ResizeAlgorithm {
     }
 }
 
-
 /// The method used to dispose a frame before transitioning to the next frame in an image sequence.
 #[pyclass]
 pub enum DisposalMethod {

@@ -40,7 +40,7 @@ fn from_border_position(position: RilBorderPosition) -> String {
 }
 
 /// Represents a shape border.
-/// 
+///
 /// Parameters
 /// ----------
 /// color: :class:`.Pixel`
@@ -49,7 +49,7 @@ fn from_border_position(position: RilBorderPosition) -> String {
 ///     The thickness of the border
 /// position: str
 ///     The position of the border
-/// 
+///
 /// Raises
 /// ------
 /// ValueError
@@ -129,13 +129,13 @@ impl Display for Border {
 }
 
 /// An ellipse, which could be a circle.
-/// 
+///
 /// .. warning::
-///     Using any of the predefined constructors will automatically set the position to (0, 0) and you must explicitly set the size of the ellipse with `.size` in order to set a size for the ellipse. 
+///     Using any of the predefined constructors will automatically set the position to (0, 0) and you must explicitly set the size of the ellipse with `.size` in order to set a size for the ellipse.
 ///     A size must be set before drawing.
-/// 
+///
 ///     This also does not set any border or fill for the ellipse, you must explicitly set either one of them.
-/// 
+///
 /// Parameters
 /// ---------
 /// position: Tuple[int, int]
@@ -148,7 +148,7 @@ impl Display for Border {
 ///     The color to use for filling the ellipse
 /// overlay: Optional[str]
 ///     The overlay mode of the ellipse.
-/// 
+///
 /// Raises
 /// ------
 /// ValueError
@@ -191,7 +191,7 @@ impl Ellipse {
     }
 
     /// Creates a new ellipse from the given bounding box.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// x1: int
@@ -207,7 +207,7 @@ impl Ellipse {
     }
 
     /// Creates a new circle with the given center position and radius.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// x: int
@@ -304,18 +304,18 @@ impl Ellipse {
 }
 
 /// A rectangle.
-/// 
+///
 /// .. warning::
-///     Using any of the predefined construction methods will automatically set the position to (0, 0). 
+///     Using any of the predefined construction methods will automatically set the position to (0, 0).
 ///     If you want to specify a different position, you must set the position with `.position`
-/// 
-///     You must specify a width and height for the rectangle with something such as with_size. 
-///     If you don't, a panic will be raised during drawing. 
+///
+///     You must specify a width and height for the rectangle with something such as with_size.
+///     If you don't, a panic will be raised during drawing.
 ///     You can also try using from_bounding_box to create a rectangle from a bounding box, which automatically fills in the size.
-/// 
+///
 ///     Additionally, a panic will be raised during drawing if you do not specify either a fill color or a border.
 ///     these can be set with `.fill` and `.border` respectively.
-/// 
+///
 /// Parameters
 /// ----------
 /// position: Tuple[int, int]
@@ -328,7 +328,7 @@ impl Ellipse {
 ///     The color to use for filling the rectangle
 /// overlay: Optional[str]
 ///     The overlay mode of the rectangle.
-/// 
+///
 /// Raises
 /// ------
 /// ValueError
@@ -379,7 +379,7 @@ impl Rectangle {
 
     /// Creates a new rectangle from two coordinates specified as 4 parameters.
     /// The first coordinate is the top-left corner of the rectangle, and the second coordinate is the bottom-right corner of the rectangle.
-    /// 
+    ///
     /// Parameters
     /// ----------
     /// x1: int
@@ -393,7 +393,7 @@ impl Rectangle {
             inner: RilRectangle::from_bounding_box(x1, y1, x2, y2),
         }
     }
-    
+
     /// Tuple[int, int]: The position of the rectangle. The top-left corner of the rectangle will be rendered at this position.
     #[getter]
     fn get_position(&self) -> Xy {

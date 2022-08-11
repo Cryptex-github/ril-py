@@ -19,6 +19,7 @@ impl From<Error> for PyErr {
                 RilError::EncodingError(_)
                 | RilError::DecodingError(_)
                 | RilError::UnknownEncodingFormat
+                | RilError::FontError(_)
                 | RilError::IncompatibleImageData { .. } => {
                     PyRuntimeError::new_err(format!("{}", err))
                 }
