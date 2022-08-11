@@ -91,7 +91,7 @@ impl Border {
 
     /// str: The position of the border.
     #[getter]
-    fn get_border_position(&self) -> String {
+    fn get_position(&self) -> String {
         from_border_position(self.inner.position)
     }
 
@@ -106,7 +106,7 @@ impl Border {
     }
 
     #[setter]
-    fn set_border_position(&mut self, position: &str) -> PyResult<()> {
+    fn set_position(&mut self, position: &str) -> PyResult<()> {
         self.inner.position = get_border_position(position)?;
 
         Ok(())
@@ -117,7 +117,7 @@ impl Border {
             "<Border color={} thickness={} position={}>",
             self.get_color(),
             self.get_thickness(),
-            self.get_border_position()
+            self.get_position()
         )
     }
 }
@@ -138,9 +138,9 @@ impl Display for Border {
 /// 
 /// Parameters
 /// ---------
-/// position: (int, int)
+/// position: Tuple[int, int]
 ///     The position of the ellipse
-/// radii: (int, int)
+/// radii: Tuple[int, int]
 ///     The radii of the ellipse
 /// border: Optional[:class:`.Border`]
 ///     The border of the ellipse.
@@ -224,13 +224,13 @@ impl Ellipse {
         }
     }
 
-    /// (int, int): The center position of the ellipse. The center of this ellipse will be rendered at this position.
+    /// Tuple[int, int]: The center position of the ellipse. The center of this ellipse will be rendered at this position.
     #[getter]
     fn get_position(&self) -> Xy {
         self.inner.position
     }
 
-    /// (int, int): The radii of the ellipse, in pixels; (horizontal, vertical).
+    /// Tuple[int, int]: The radii of the ellipse, in pixels; (horizontal, vertical).
     #[getter]
     fn get_radii(&self) -> Xy {
         self.inner.radii
@@ -318,9 +318,9 @@ impl Ellipse {
 /// 
 /// Parameters
 /// ----------
-/// position: (int, int)
+/// position: Tuple[int, int]
 ///     The position of the rectangle
-/// size: (int, int)
+/// size: Tuple[int, int]
 ///     The size of the rectangle
 /// border: Optional[:class:`.Border`]
 ///     The border of the ellipse.
@@ -394,13 +394,13 @@ impl Rectangle {
         }
     }
     
-    /// (int, int): The position of the rectangle. The top-left corner of the rectangle will be rendered at this position.
+    /// Tuple[int, int]: The position of the rectangle. The top-left corner of the rectangle will be rendered at this position.
     #[getter]
     fn get_position(&self) -> Xy {
         self.inner.position
     }
 
-    /// (int, int): The dimensions of the rectangle, in pixels.
+    /// Tuple[int, int]: The dimensions of the rectangle, in pixels.
     #[getter]
     fn get_size(&self) -> Xy {
         self.inner.size

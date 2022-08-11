@@ -38,7 +38,7 @@ impl Frame {
         self.inner.delay().as_millis()
     }
 
-    /// (int, int): Returns the dimensions of this frame.
+    /// Tuple[int, int]: Returns the dimensions of this frame.
     #[getter]
     fn get_dimensions(&self) -> Xy {
         self.inner.dimensions()

@@ -479,7 +479,7 @@ impl Image {
         format!("{}", self.inner.format())
     }
 
-    /// (int, int): Returns the dimensions of the image.
+    /// Tuple[int, int]: Returns the dimensions of the image.
     #[getter]
     fn dimensions(&self) -> (u32, u32) {
         self.inner.dimensions()

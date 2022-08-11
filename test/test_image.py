@@ -1,5 +1,3 @@
-# type: ignore
-
 import ril
 from ril import Rgba
 
