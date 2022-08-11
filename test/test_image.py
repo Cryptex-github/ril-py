@@ -1,3 +1,4 @@
+import requests
 import ril
 from ril import Rgba
 
@@ -28,8 +29,8 @@ def test_image_pixels() -> None:
 
     image.pixels()
 
-def test_gif_decode() -> None:
-    for i, frame in enumerate(ril.ImageSequence.open('test/sample.gif')):
+def test_gif_decode(fetch_file) -> None:
+    for i, frame in enumerate(ril.ImageSequence.from_bytes(fetch_file('sample.gif'))):
         frame = frame.image
 
         assert frame.dimensions == (256, 256)
