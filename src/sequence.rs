@@ -63,6 +63,11 @@ impl Frame {
         self.inner.set_delay(Duration::from_millis(delay));
     }
 
+    #[setter]
+    fn set_disposal(&mut self, disposal: DisposalMethod) {
+        self.inner.set_disposal(disposal.into())
+    }
+
     fn __repr__(&self) -> String {
         format!(
             "<Frame delay={} dimensions=({}, {}) disposal={}>",

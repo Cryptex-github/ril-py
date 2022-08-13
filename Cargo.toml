@@ -16,5 +16,5 @@ name = "ril"
 crate-type = ["cdylib"]
 
 [dependencies]
-ril = { git = "https://github.com/jay3332/ril" }
+ril = { git = "https://github.com/jay3332/ril", features = ["all"] }
 pyo3 = { version = "0.16", features = ["extension-module", "abi3-py37"] }

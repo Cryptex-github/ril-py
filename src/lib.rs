@@ -6,6 +6,7 @@
 
 mod draw;
 mod error;
+mod font;
 mod image;
 mod pixels;
 mod sequence;

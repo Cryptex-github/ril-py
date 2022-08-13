@@ -60,6 +60,7 @@ impl From<ResizeAlgorithm> for ril::ResizeAlgorithm {
 
 /// The method used to dispose a frame before transitioning to the next frame in an image sequence.
 #[pyclass]
+#[derive(Clone)]
 pub enum DisposalMethod {
     /// Do not dispose the current frame. Usually not desired for transparent images.
     Keep,
@@ -85,6 +86,16 @@ impl From<ril::DisposalMethod> for DisposalMethod {
             ril::DisposalMethod::None => Self::Keep,
             ril::DisposalMethod::Background => Self::Background,
             ril::DisposalMethod::Previous => Self::Previous,
+        }
+    }
+}
+
+impl Into<ril::DisposalMethod> for DisposalMethod {
+    fn into(self) -> ril::DisposalMethod {
+        match self {
+            DisposalMethod::Keep => ril::DisposalMethod::None,
+            DisposalMethod::Background => ril::DisposalMethod::Background,
+            DisposalMethod::Previous => ril::DisposalMethod::Previous,
         }
     }
 }

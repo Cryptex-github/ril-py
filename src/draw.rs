@@ -16,7 +16,7 @@ use ril::{
 use crate::{
     pixels::Pixel,
     utils::{cast_overlay, cast_pixel_to_pyobject},
-    Xy,
+    Xy, font::TextSegment,
 };
 
 fn get_border_position(position: &str) -> PyResult<RilBorderPosition> {
@@ -492,6 +492,6 @@ pub struct DrawEntity<'a>(pub Box<dyn Draw<Dynamic>>, PhantomData<&'a ()>);
 
 impl<'a> FromPyObject<'a> for DrawEntity<'a> {
     fn extract(obj: &'a PyAny) -> PyResult<Self> {
-        impl_draw_entities!(obj, Rectangle, Ellipse)
+        impl_draw_entities!(obj, Rectangle, Ellipse, TextSegment)
     }
 }
