@@ -1,4 +1,4 @@
-use crate::{Font, Draw, Pixel, OverlayMode, WrapStyle, Image};
+use ril::{Font, Draw, Pixel, OverlayMode, WrapStyle, Image};
 use fontdue::layout::{CoordinateSystem, TextStyle, Layout, LayoutSettings};
 
 /// Represents a text segment that can be drawn.
