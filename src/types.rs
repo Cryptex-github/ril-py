@@ -58,6 +58,23 @@ impl From<ResizeAlgorithm> for ril::ResizeAlgorithm {
     }
 }
 
+impl From<ril::ResizeAlgorithm> for ResizeAlgorithm {
+    fn from(algo: ril::ResizeAlgorithm) -> ResizeAlgorithm {
+        cast_enum!(
+            ril::ResizeAlgorithm,
+            Self,
+            algo,
+            Nearest,
+            Box,
+            Bilinear,
+            Hamming,
+            Bicubic,
+            Mitchell,
+            Lanczos3
+        )
+    }
+}
+
 /// The method used to dispose a frame before transitioning to the next frame in an image sequence.
 #[pyclass]
 #[derive(Clone)]
@@ -80,22 +97,115 @@ impl Display for DisposalMethod {
     }
 }
 
-impl From<ril::DisposalMethod> for DisposalMethod {
-    fn from(method: ril::DisposalMethod) -> Self {
+impl From<DisposalMethod> for ril::DisposalMethod {
+    fn from(method: DisposalMethod) -> ril::DisposalMethod {
         match method {
-            ril::DisposalMethod::None => Self::Keep,
-            ril::DisposalMethod::Background => Self::Background,
-            ril::DisposalMethod::Previous => Self::Previous,
-        }
-    }
-}
-
-impl Into<ril::DisposalMethod> for DisposalMethod {
-    fn into(self) -> ril::DisposalMethod {
-        match self {
             DisposalMethod::Keep => ril::DisposalMethod::None,
             DisposalMethod::Background => ril::DisposalMethod::Background,
             DisposalMethod::Previous => ril::DisposalMethod::Previous,
         }
+    }
+}
+
+impl From<ril::DisposalMethod> for DisposalMethod {
+    fn from(method: ril::DisposalMethod) -> Self {
+        match method {
+            ril::DisposalMethod::None => DisposalMethod::Keep,
+            ril::DisposalMethod::Background => DisposalMethod::Background,
+            ril::DisposalMethod::Previous => DisposalMethod::Previous,
+        }
+    }
+}
+
+#[pyclass]
+#[derive(Clone)]
+pub enum WrapStyle {
+    NoWrap,
+    Word,
+    Character,
+}
+
+impl From<WrapStyle> for ril::WrapStyle {
+    fn from(style: WrapStyle) -> Self {
+        match style {
+            WrapStyle::NoWrap => ril::WrapStyle::None,
+            WrapStyle::Word => ril::WrapStyle::Word,
+            WrapStyle::Character => ril::WrapStyle::Character,
+        }
+    }
+}
+
+impl From<ril::WrapStyle> for WrapStyle {
+    fn from(style: ril::WrapStyle) -> Self {
+        match style {
+            ril::WrapStyle::None => WrapStyle::NoWrap,
+            ril::WrapStyle::Word => WrapStyle::Word,
+            ril::WrapStyle::Character => WrapStyle::Character,
+        }
+    }
+}
+
+#[derive(Clone)]
+#[pyclass]
+pub enum OverlayMode {
+    Replace,
+    Merge,
+}
+
+impl From<OverlayMode> for ril::OverlayMode {
+    fn from(mode: OverlayMode) -> Self {
+        match mode {
+            OverlayMode::Replace => ril::OverlayMode::Replace,
+            OverlayMode::Merge => ril::OverlayMode::Merge,
+        }
+    }
+}
+
+impl From<ril::OverlayMode> for OverlayMode {
+    fn from(mode: ril::OverlayMode) -> Self {
+        match mode {
+            ril::OverlayMode::Replace => OverlayMode::Replace,
+            ril::OverlayMode::Merge => OverlayMode::Merge,
+        }
+    }
+}
+
+#[pyclass]
+#[derive(Clone)]
+pub enum HorizontalAnchor {
+    Left,
+    Center,
+    Right,
+}
+
+impl From<HorizontalAnchor> for ril::HorizontalAnchor {
+    fn from(anchor: HorizontalAnchor) -> Self {
+        cast_enum!(HorizontalAnchor, Self, anchor, Left, Center, Right)
+    }
+}
+
+impl From<ril::HorizontalAnchor> for HorizontalAnchor {
+    fn from(anchor: ril::HorizontalAnchor) -> Self {
+        cast_enum!(ril::HorizontalAnchor, Self, anchor, Left, Center, Right)
+    }
+}
+
+#[pyclass]
+#[derive(Clone)]
+pub enum VerticalAnchor {
+    Top,
+    Center,
+    Bottom,
+}
+
+impl From<VerticalAnchor> for ril::VerticalAnchor {
+    fn from(anchor: VerticalAnchor) -> Self {
+        cast_enum!(VerticalAnchor, Self, anchor, Top, Center, Bottom)
+    }
+}
+
+impl From<ril::VerticalAnchor> for VerticalAnchor {
+    fn from(anchor: ril::VerticalAnchor) -> Self {
+        cast_enum!(ril::VerticalAnchor, Self, anchor, Top, Center, Bottom)
     }
 }

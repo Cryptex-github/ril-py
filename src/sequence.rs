@@ -124,16 +124,14 @@ impl ImageSequence {
     #[pyo3(text_signature = "(cls, bytes, format)")]
     fn from_bytes(_: &PyType, bytes: &[u8], format: Option<&str>) -> Result<Self, Error> {
         Ok(if let Some(format) = format {
-            let inner =
-                RilImageSequence::decode_from_bytes(ImageFormat::from_extension(format)?, bytes)?
-                    .into_sequence()?;
+            let inner = RilImageSequence::from_bytes(ImageFormat::from_extension(format)?, bytes)?
+                .into_sequence()?;
             let iter = Box::new(inner.clone().into_iter());
 
             Self { inner, iter }
         } else {
-            let inner =
-                RilImageSequence::decode_from_bytes(ImageFormat::infer_encoding(bytes), bytes)?
-                    .into_sequence()?;
+            let inner = RilImageSequence::from_bytes(ImageFormat::infer_encoding(bytes), bytes)?
+                .into_sequence()?;
             let iter = Box::new(inner.clone().into_iter());
 
             Self { inner, iter }

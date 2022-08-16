@@ -103,11 +103,11 @@ impl Image {
     fn from_bytes(_: &PyType, bytes: &[u8], format: Option<&str>) -> Result<Self, Error> {
         Ok(if let Some(format) = format {
             Self {
-                inner: RilImage::decode_from_bytes(ImageFormat::from_extension(format)?, bytes)?,
+                inner: RilImage::from_bytes(ImageFormat::from_extension(format)?, bytes)?,
             }
         } else {
             Self {
-                inner: RilImage::decode_inferred_from_bytes(bytes)?,
+                inner: RilImage::from_bytes_inferred(bytes)?,
             }
         })
     }

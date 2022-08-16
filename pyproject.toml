@@ -5,7 +5,7 @@ license = { text = "MIT" }
 authors = [ { name = "Cryptex" } ]
 requires-python = ">=3.7"
 readme = "README.md"
-description="Rust Imaging Library's Python binding: A performant and high-level image processing library for Python written in Rust"
+description = "Rust Imaging Library's Python binding: A performant and high-level image processing library for Python written in Rust"
 
 [project.urls]
 homepage = "https://github.com/Cryptex-github/ril-py"

@@ -15,8 +15,9 @@ use ril::{
 
 use crate::{
     pixels::Pixel,
+    text::TextSegment,
     utils::{cast_overlay, cast_pixel_to_pyobject},
-    Xy, font::TextSegment,
+    Xy,
 };
 
 fn get_border_position(position: &str) -> PyResult<RilBorderPosition> {
