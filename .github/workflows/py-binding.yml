@@ -51,6 +51,9 @@ jobs:
         profile: minimal
         toolchain: stable
         override: true
+      
+    - name: Setup Rust cache
+      uses: Swatinem/rust-cache@v1
 
     - run: rustup target add aarch64-apple-darwin
       if: matrix.os == 'macos'
