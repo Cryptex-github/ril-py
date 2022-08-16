@@ -71,9 +71,10 @@ jobs:
         python -m build --sdist -o wheelhouse
 
     - name: Cache Docker images
+      if: matrix.os == 'ubuntu'
       uses: ScribeMD/docker-cache@0.2.1
       with:
-        key: docker-${{ runner.os }}
+        key: docker-${{ runner.os }}-${{ matrix.python-version }}
 
     - name: build ${{ matrix.platform || matrix.os }} binaries
       run: cibuildwheel --output-dir wheelhouse
