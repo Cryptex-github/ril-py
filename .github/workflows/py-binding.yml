@@ -70,6 +70,11 @@ jobs:
         pip install maturin build
         python -m build --sdist -o wheelhouse
 
+    - name: Cache Docker images
+      uses: ScribeMD/docker-cache@0.2.1
+      with:
+        key: docker-${{ runner.os }}
+
     - name: build ${{ matrix.platform || matrix.os }} binaries
       run: cibuildwheel --output-dir wheelhouse
       env:
