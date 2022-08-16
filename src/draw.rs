@@ -15,7 +15,6 @@ use ril::{
 
 use crate::{
     pixels::Pixel,
-    text::TextSegment,
     utils::{cast_overlay, cast_pixel_to_pyobject},
     Xy,
 };
@@ -493,6 +492,6 @@ pub struct DrawEntity<'a>(pub Box<dyn Draw<Dynamic>>, PhantomData<&'a ()>);
 
 impl<'a> FromPyObject<'a> for DrawEntity<'a> {
     fn extract(obj: &'a PyAny) -> PyResult<Self> {
-        impl_draw_entities!(obj, Rectangle, Ellipse, TextSegment)
+        impl_draw_entities!(obj, Rectangle, Ellipse)
     }
 }
