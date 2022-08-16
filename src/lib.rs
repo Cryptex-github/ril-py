@@ -12,6 +12,7 @@ mod pixels;
 mod sequence;
 mod types;
 mod utils;
+mod workaround;
 
 use draw::{Border, Ellipse, Rectangle};
 use image::Image;
