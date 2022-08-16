@@ -53,7 +53,9 @@ jobs:
         override: true
       
     - name: Setup Rust cache
-      uses: Swatinem/rust-cache@v1
+      uses: Swatinem/rust-cache@v2
+      with:
+        key: ${{ matrix.alt_arch_name }}
 
     - run: rustup target add aarch64-apple-darwin
       if: matrix.os == 'macos'
