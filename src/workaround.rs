@@ -323,7 +323,7 @@ impl Default for VerticalAnchor {
 /// # Note
 /// This is does not implement [`Clone`] and therefore it is not cloneable! Consider using
 /// [`TextSegment`] if you require cloning functionality.
-pub struct TextLayout<P: Pixel> {
+pub struct OwnedTextLayout<P: Pixel> {
     inner: Layout<(P, OverlayMode)>,
     fonts: Vec<fontdue::Font>,
     pub(crate) settings: LayoutSettings,
@@ -331,7 +331,7 @@ pub struct TextLayout<P: Pixel> {
     y_anchor: VerticalAnchor,
 }
 
-impl<P: Pixel> TextLayout<P> {
+impl<P: Pixel> OwnedTextLayout<P> {
     /// Creates a new text layout with default settings.
     #[must_use]
     pub fn new() -> Self {
@@ -574,7 +574,7 @@ impl<P: Pixel> TextLayout<P> {
     }
 }
 
-impl<X: Pixel> Draw<X> for TextLayout<X> {
+impl<X: Pixel> Draw<X> for OwnedTextLayout<X> {
     fn draw(&self, image: &mut Image<X>) {
         // Skips the calculation of offsets
         if self.x_anchor == HorizontalAnchor::Left && self.y_anchor == VerticalAnchor::Top {
@@ -595,7 +595,7 @@ impl<X: Pixel> Draw<X> for TextLayout<X> {
     }
 }
 
-impl<Dynamic: Pixel> Default for TextLayout<Dynamic> {
+impl<Dynamic: Pixel> Default for OwnedTextLayout<Dynamic> {
     fn default() -> Self {
         Self::new()
     }
