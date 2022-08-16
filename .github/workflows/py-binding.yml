@@ -78,7 +78,20 @@ jobs:
         key: ${{ runner.os }}-pip-${{ matrix.python-version }}
 
     - name: install python dependencies
-      run: pip install -U setuptools wheel twine cibuildwheel
+      run: pip install -U setuptools wheel twine cibuildwheel platformdirs
+
+    - name: Display cibuildwheel cache dir
+      id: cibuildwheel-cache
+      run: |
+        from platformdirs import user_cache_path
+        print('::set-output name=dir::' + str(user_cache_path(appname='cibuildwheel', appauthor='pypa')))
+      shell: python
+
+    - name: Cache cibuildwheel tools
+      uses: actions/cache@v3
+      with:
+        path: ${{ steps.cibuildwheel-cache.outputs.dir }}
+        key: ${{ runner.os }}-cibuildwheel-${{ matrix.python-version }}
 
     - name: build sdist
       if: matrix.os == 'ubuntu' && matrix.python-version == 'cp310'
