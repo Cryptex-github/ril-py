@@ -1,5 +1,5 @@
-# ril
-**R**ust **I**maging **L**ibrary: A performant and high-level image processing library for Python written in Rust.
+# ril-py
+**R**ust **I**maging **L**ibrary for Python: Python bindings for [ril](https://github.com/jay3332/ril), a performant and high-level image processing library written in Rust.
 
 ## What's this?
 This is a python binding around [ril](https://github.com/jay3332/ril) designed to provide an easy-to-use, high-level interface
