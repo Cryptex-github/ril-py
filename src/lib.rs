@@ -6,12 +6,12 @@
 
 mod draw;
 mod error;
-mod font;
 mod image;
 mod pixels;
 mod sequence;
 mod types;
 mod utils;
+mod text;
 mod workaround;
 
 use draw::{Border, Ellipse, Rectangle};
@@ -20,6 +20,8 @@ use pixels::{BitPixel, Pixel, Rgb, Rgba, L};
 use pyo3::prelude::*;
 use sequence::{Frame, ImageSequence};
 use types::{DisposalMethod, ResizeAlgorithm};
+
+use text::{TextLayout, TextSegment, Font};
 
 type Xy = (u32, u32);
 
@@ -47,7 +49,10 @@ fn ril(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
         ResizeAlgorithm,
         Frame,
         Ellipse,
-        ImageSequence
+        ImageSequence,
+        TextSegment,
+        TextLayout,
+        Font
     );
 
     Ok(())

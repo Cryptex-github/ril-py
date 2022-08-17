@@ -66,6 +66,19 @@ Sequence
     :members:
 
 
+Text
+----
+
+.. autoclass:: Font
+    :members:
+
+.. autoclass:: TextSegment
+    :members:
+
+.. autoclass:: TextLayout
+    :members:
+
+
 Enums
 -----
 
@@ -118,3 +131,63 @@ Enums
     .. attribute:: Lanczos3
 
         A Lanczos filter with a window of 3. Calculates output pixel value using a high-quality Lanczos filter on all pixels.
+
+.. class:: WrapStyle
+
+    The wrapping style of text.
+
+    .. attribute:: NoWrap
+
+        Do not wrap text.
+    
+    .. attribute:: Word
+
+        Wrap text on word boundaries.
+    
+    .. attribute:: Character
+
+        Wrap text on character boundaries.
+
+.. class:: OverlayMode
+
+    The mode to use when overlaying an image onto another image.
+
+    .. attribute:: Overwrite
+
+        Overwrite the pixels of the image with the pixels of the overlay image.
+    
+    .. attribute:: Blend
+
+        Blend the pixels of the image with the pixels of the overlay image.
+
+.. class:: HorizontalAnchor
+    
+    The horizontal anchor of text.
+
+    .. attribute:: Left
+
+        Anchor text to the left.
+    
+    .. attribute:: Center
+
+        Anchor text to the center.
+    
+    .. attribute:: Right
+
+        Anchor text to the right.
+
+.. class:: VerticalAnchor
+        
+    The vertical anchor of text.
+
+    .. attribute:: Top
+
+        Anchor text to the top.
+
+    .. attribute:: Center
+
+        Anchor text to the center.
+
+    .. attribute:: Bottom
+
+        Anchor text to the bottom.

@@ -1,12 +1,17 @@
+use std::sync::{PoisonError, RwLockReadGuard, RwLockWriteGuard};
+
 use pyo3::{
     exceptions::{PyIOError, PyRuntimeError, PyTypeError, PyValueError},
     prelude::*,
 };
-use ril::Error as RilError;
+use ril::{Error as RilError, Dynamic};
+
+use crate::workaround::OwnedTextLayout;
 
 pub enum Error {
     Ril(RilError),
     UnexpectedFormat(String, String), // (Expected, Got)
+    PoisionError
 }
 
 impl From<Error> for PyErr {
@@ -32,6 +37,7 @@ impl From<Error> for PyErr {
                 "Invalid Image format, expected `{}`, got `{}`",
                 expected, got
             )),
+            Error::PoisionError => PyRuntimeError::new_err("The internal RwLock was poisoned."),
         }
     }
 }
@@ -39,5 +45,20 @@ impl From<Error> for PyErr {
 impl From<RilError> for Error {
     fn from(err: RilError) -> Self {
         Self::Ril(err)
+    }
+}
+
+type ReadPoisionError<'a> = PoisonError<RwLockReadGuard<'a, OwnedTextLayout<Dynamic>>>;
+type WritePoisionError<'a> = PoisonError<RwLockWriteGuard<'a, OwnedTextLayout<Dynamic>>>;
+
+impl<'a> From<ReadPoisionError<'a>> for Error {
+    fn from(_: ReadPoisionError) -> Self {
+        Self::PoisionError
+    }
+}
+
+impl<'a> From<WritePoisionError<'a>> for Error {
+    fn from(_: WritePoisionError) -> Self {
+        Self::PoisionError
     }
 }

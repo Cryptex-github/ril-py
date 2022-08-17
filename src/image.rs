@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use crate::draw::DrawEntity;
 use crate::error::Error;
 use crate::pixels::{BitPixel, Pixel, Rgb, Rgba, L};
-use crate::types::ResizeAlgorithm;
+use crate::types::{ResizeAlgorithm, OverlayMode};
 use crate::utils::cast_pixel_to_pyobject;
 use pyo3::types::PyBytes;
 use pyo3::{
@@ -159,10 +159,10 @@ impl Image {
         })
     }
 
-    /// str: Returns the overlay mode of the image.
+    /// :class:`.OverlayMode`: Returns the overlay mode of the image.
     #[getter]
-    fn overlay_mode(&self) -> String {
-        format!("{}", self.inner.overlay_mode())
+    fn overlay_mode(&self) -> OverlayMode {
+        self.inner.overlay_mode().into()
     }
 
     /// str: Returns the mode of the image.

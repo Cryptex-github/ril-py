@@ -10,13 +10,13 @@ use ril::{
         Border as RilBorder, BorderPosition as RilBorderPosition, Ellipse as RilEllipse,
         Rectangle as RilRectangle,
     },
-    Draw, Dynamic, OverlayMode,
+    Draw, Dynamic,
 };
 
 use crate::{
     pixels::Pixel,
-    utils::{cast_overlay, cast_pixel_to_pyobject},
-    Xy,
+    utils::{cast_pixel_to_pyobject},
+    Xy, text::TextSegment, types::OverlayMode,
 };
 
 fn get_border_position(position: &str) -> PyResult<RilBorderPosition> {
@@ -148,11 +148,6 @@ impl Display for Border {
 ///     The color to use for filling the ellipse
 /// overlay: Optional[str]
 ///     The overlay mode of the ellipse.
-///
-/// Raises
-/// ------
-/// ValueError
-///     The overlay mode provided is not one of `replace`, or `merge`
 #[pyclass]
 #[derive(Clone)]
 #[pyo3(text_signature = "(*, position, radii, border, fill, overlay)")]
@@ -169,7 +164,7 @@ impl Ellipse {
         radii: Xy,
         border: Option<Border>,
         fill: Option<Pixel>,
-        overlay: Option<&str>,
+        overlay: Option<OverlayMode>,
     ) -> PyResult<Self> {
         let mut inner = RilEllipse::<Dynamic> {
             position,
@@ -183,9 +178,7 @@ impl Ellipse {
 
         inner.fill = fill.map(|i| i.inner);
 
-        if let Some(overlay) = overlay {
-            inner.overlay = Some(cast_overlay(overlay)?);
-        }
+        inner.overlay = overlay.map(|i| i.into());
 
         Ok(Self { inner })
     }
@@ -253,10 +246,10 @@ impl Ellipse {
             .map_or(None, |fill| Some(cast_pixel_to_pyobject(py, fill)))
     }
 
-    /// Optional[str]: The overlay mode of the ellipse.
+    /// Optional[:class:`.OverlayMode`]: The overlay mode of the ellipse.
     #[getter]
-    fn get_overlay(&self) -> Option<String> {
-        self.inner.overlay.map(|o| o.to_string())
+    fn get_overlay(&self) -> Option<OverlayMode> {
+        self.inner.overlay.map(|i| i.into())
     }
 
     #[setter]
@@ -280,8 +273,8 @@ impl Ellipse {
     }
 
     #[setter]
-    fn set_overlay(&mut self, overlay: &str) -> PyResult<()> {
-        self.inner.overlay = Some(cast_overlay(overlay)?);
+    fn set_overlay(&mut self, overlay: OverlayMode) -> PyResult<()> {
+        self.inner.overlay = Some(overlay.into());
 
         Ok(())
     }
@@ -298,7 +291,7 @@ impl Ellipse {
             self.get_fill(py)
                 .map_or("None".to_string(), |f| f.to_string()),
             self.get_overlay()
-                .map_or("None".to_string(), |f| f.to_string())
+                .map_or("None".to_string(), |f| format!("{:?}", f)),
         )
     }
 }
@@ -326,7 +319,7 @@ impl Ellipse {
 ///     The border of the ellipse.
 /// fill: Optional[:class:`.Pixel`]
 ///     The color to use for filling the rectangle
-/// overlay: Optional[str]
+/// overlay: Optional[:class:`.OverlayMode`]
 ///     The overlay mode of the rectangle.
 ///
 /// Raises
@@ -349,30 +342,15 @@ impl Rectangle {
         size: Xy,
         border: Option<Border>,
         fill: Option<Pixel>,
-        overlay: Option<&str>,
+        overlay: Option<OverlayMode>,
     ) -> PyResult<Self> {
-        let overlay = if let Some(overlay) = overlay {
-            Some(match overlay {
-                "merge" => Ok::<OverlayMode, PyErr>(OverlayMode::Merge),
-                "replace" => Ok(OverlayMode::Replace),
-                _ => {
-                    return Err(PyValueError::new_err(format!(
-                        "Expected `merge` or `replace`, got `{}`",
-                        overlay
-                    )))
-                }
-            }?)
-        } else {
-            None
-        };
-
         Ok(Self {
             inner: RilRectangle {
                 position,
                 size,
                 border: border.map(|b| b.inner),
                 fill: fill.map(|f| f.inner),
-                overlay,
+                overlay: overlay.map(|o| o.into()),
             },
         })
     }
@@ -423,10 +401,10 @@ impl Rectangle {
             .map_or(None, |fill| Some(cast_pixel_to_pyobject(py, fill)))
     }
 
-    /// Optional[str]: The overlay mode of the rectangle.
+    /// Optional[:class:`.OverlayMode`]: The overlay mode of the rectangle.
     #[getter]
-    fn get_overlay(&self) -> Option<String> {
-        self.inner.overlay.map(|o| format!("{}", o))
+    fn get_overlay(&self) -> Option<OverlayMode> {
+        self.inner.overlay.map(|i| i.into())
     }
 
     #[setter]
@@ -450,8 +428,8 @@ impl Rectangle {
     }
 
     #[setter]
-    fn set_overlay(&mut self, overlay: &str) -> PyResult<()> {
-        self.inner.overlay = Some(cast_overlay(overlay)?);
+    fn set_overlay(&mut self, overlay: OverlayMode) -> PyResult<()> {
+        self.inner.overlay = Some(overlay.into());
 
         Ok(())
     }
@@ -468,7 +446,7 @@ impl Rectangle {
             self.get_fill(py)
                 .map_or("None".to_string(), |f| f.to_string()),
             self.get_overlay()
-                .map_or("None".to_string(), |f| f.to_string())
+                .map_or("None".to_string(), |f| format!("{:?}", f)),
         )
     }
 }
@@ -492,6 +470,6 @@ pub struct DrawEntity<'a>(pub Box<dyn Draw<Dynamic>>, PhantomData<&'a ()>);
 
 impl<'a> FromPyObject<'a> for DrawEntity<'a> {
     fn extract(obj: &'a PyAny) -> PyResult<Self> {
-        impl_draw_entities!(obj, Rectangle, Ellipse)
+        impl_draw_entities!(obj, Rectangle, Ellipse, TextSegment)
     }
 }

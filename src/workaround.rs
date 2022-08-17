@@ -1,4 +1,4 @@
-use ril::{Font, Draw, Pixel, OverlayMode, WrapStyle, Image};
+use ril::{Font, Draw, Pixel, OverlayMode, WrapStyle, Image, HorizontalAnchor, VerticalAnchor};
 use fontdue::layout::{CoordinateSystem, TextStyle, Layout, LayoutSettings};
 
 /// Represents a text segment that can be drawn.
@@ -269,43 +269,9 @@ fn render_layout_with_alignment<P: Pixel>(
     }
 }
 
-impl<Alvin: Pixel> Draw<Alvin> for OwnedTextSegment<Alvin> {
-    fn draw(&self, image: &mut Image<Alvin>) {
+impl<P: Pixel> Draw<P> for OwnedTextSegment<P> {
+    fn draw(&self, image: &mut Image<P>) {
         render_layout_as_ref(image, self.font.inner(), &self.layout());
-    }
-}
-
-/// Represents where text is anchored horizontally.
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
-pub enum HorizontalAnchor {
-    /// The x position is the left edge of the text. This is the default.
-    Left,
-    /// The x position is the center of the text. This also center-aligns the text.
-    Center,
-    /// The x position is the right edge of the text. This also right-aligns the text.
-    Right,
-}
-
-impl Default for HorizontalAnchor {
-    fn default() -> Self {
-        Self::Left
-    }
-}
-
-/// Represents where text is anchored vertically.
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
-pub enum VerticalAnchor {
-    /// The y position is the top edge of the text. This is the default.
-    Top,
-    /// The y position is the center of the text.
-    Center,
-    /// The y position is the bottom edge of the text.
-    Bottom,
-}
-
-impl Default for VerticalAnchor {
-    fn default() -> Self {
-        Self::Top
     }
 }
 
@@ -327,8 +293,8 @@ pub struct OwnedTextLayout<P: Pixel> {
     inner: Layout<(P, OverlayMode)>,
     fonts: Vec<fontdue::Font>,
     pub(crate) settings: LayoutSettings,
-    x_anchor: HorizontalAnchor,
-    y_anchor: VerticalAnchor,
+    pub(crate) x_anchor: HorizontalAnchor,
+    pub(crate) y_anchor: VerticalAnchor,
 }
 
 impl<P: Pixel> OwnedTextLayout<P> {
@@ -352,7 +318,6 @@ impl<P: Pixel> OwnedTextLayout<P> {
     /// Sets the position of the text layout.
     ///
     /// **This must be set before adding any text segments!**
-    #[must_use]
     pub fn set_position(&mut self, x: u32, y: u32)  {
         self.set_settings(LayoutSettings {
             x: x as f32,
@@ -365,8 +330,7 @@ impl<P: Pixel> OwnedTextLayout<P> {
     /// [`with_width`] for wrapping to work.
     ///
     /// **This must be set before adding any text segments!**
-    #[must_use]
-    pub fn with_wrap(&mut self, wrap: WrapStyle) {
+    pub fn set_wrap(&mut self, wrap: WrapStyle) {
         self.set_settings(LayoutSettings {
             wrap_style: match wrap {
                 WrapStyle::None | WrapStyle::Word => fontdue::layout::WrapStyle::Word,
@@ -380,7 +344,6 @@ impl<P: Pixel> OwnedTextLayout<P> {
     /// Sets the wrapping width of the text. This does not impact [`Self::dimensions`].
     ///
     /// **This must be set before adding any text segments!**
-    #[must_use]
     pub fn set_width(&mut self, width: u32) {
         self.set_settings(LayoutSettings {
             max_width: Some(width as f32),
@@ -455,10 +418,9 @@ impl<P: Pixel> OwnedTextLayout<P> {
 
     /// Sets the horizontal anchor and vertial anchor of the text to be centered. This makes the
     /// position of the text be the center as opposed to the top-left corner.
-    #[must_use]
-    pub const fn centered(self) -> Self {
-        self.with_horizontal_anchor(HorizontalAnchor::Center)
-            .with_vertical_anchor(VerticalAnchor::Center)
+    pub fn centered(&mut self) {
+        self.x_anchor = HorizontalAnchor::Center;
+        self.y_anchor = VerticalAnchor::Center;
     }
 
     fn line_widths(&self) -> (Vec<u32>, u32, u32) {

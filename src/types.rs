@@ -118,7 +118,7 @@ impl From<ril::DisposalMethod> for DisposalMethod {
 }
 
 #[pyclass]
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum WrapStyle {
     NoWrap,
     Word,
@@ -145,7 +145,7 @@ impl From<ril::WrapStyle> for WrapStyle {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 #[pyclass]
 pub enum OverlayMode {
     Replace,

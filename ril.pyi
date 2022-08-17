@@ -92,8 +92,8 @@ class Image:
         """
 
     @property
-    def overlay_mode(self) -> str:
-        """str: Returns the overlay mode of the image."""
+    def overlay_mode(self) -> OverlayMode:
+        """:class:`.OverlayMode`: Returns the overlay mode of the image."""
 
     @property
     def mode(self) -> str:
@@ -374,7 +374,7 @@ class Ellipse:
     radii: Xy
     border: Optional[Border]
     fill: Optional[Pixel]
-    overlay: Optional[str]
+    overlay: Optional[OverlayMode]
 
     def __init__(
         self,
@@ -395,13 +395,8 @@ class Ellipse:
             The border of the ellipse.
         fill: Optional[:class:`.Pixel`]
             The color to use for filling the ellipse
-        overlay: Optional[str]
+        overlay: Optional[:class:`.OverlayMode`]
             The overlay mode of the ellipse.
-        
-        Raises
-        ------
-        ValueError
-            The overlay mode provided is not one of `replace`, or `merge`
         """
 
     @classmethod
@@ -452,7 +447,7 @@ class Rectangle:
     size: Xy
     border: Optional[Border]
     fill: Optional[Pixel]
-    overlay: Optional[str]
+    overlay: Optional[OverlayMode]
 
     def __init__(
         self,
@@ -460,29 +455,34 @@ class Rectangle:
         size: Xy,
         border: Optional[Border] = None,
         fill: Optional[Pixel] = None,
-        overlay: Optional[str] = None
-    ) -> None: ...
+        overlay: Optional[OverlayMode] = None
+    ) -> None:
+        """
+        Parameters
+        ----------
+        position: Tuple[int, int]
+            The position of the rectangle
+        size: Tuple[int, int]
+            The size of the rectangle
+        border: Optional[:class:`.Border`]
+            The border of the ellipse.
+        fill: Optional[:class:`.Pixel`]
+            The color to use for filling the rectangle
+        overlay: Optional[:class:`.OverlayMode`]
+            The overlay mode of the rectangle.
+        """
 
     @classmethod
     def from_bounding_box(cls, x1: int, y1: int, x2: int, y2: int) -> Rectangle:
         """
-    Parameters
-    ----------
-    position: Tuple[int, int]
-        The position of the rectangle
-    size: Tuple[int, int]
-        The size of the rectangle
-    border: Optional[:class:`.Border`]
-        The border of the ellipse.
-    fill: Optional[:class:`.Pixel`]
-        The color to use for filling the rectangle
-    overlay: Optional[str]
-        The overlay mode of the rectangle.
-    
-    Raises
-    ------
-    ValueError
-        The overlay mode provided is not one of `replace`, or `merge`
+        Creates a new ellipse from the given bounding box.
+       
+        Parameters
+        ----------
+        x1: int
+        y1: int
+        x2: int
+        y2: int
         """
 
 
@@ -723,6 +723,298 @@ class ImageSequence(Iterator[Frame]):
     def __next__(self) -> Frame: ...
 
 
+class TextSegment:
+    """
+    Represents a text segment that can be drawn.
+   
+    See :class:`TextLayout` for a more robust implementation that supports rendering text with multiple styles.
+    This type is for more simple and lightweight usages.
+   
+    Additionally, accessing metrics such as the width and height of the text cannot be done here,
+    but can be done in TextLayout since it keeps a running copy of the layout.
+    Use TextLayout if you will be needing to calculate the width and height of the text.
+    Additionally, TextLayout supports text anchoring, which can be used to align text.
+   
+    If you need none of these features, :class:`TextSegment` should be used in favor of being much more lightweight.
+    """
+    def __init__(
+        self,
+        font: Font,
+        text: str,
+        fill: Pixel,
+        position: Optional[Tuple[int, int]] = None,
+        size: Optional[float] = None,
+        overlay: Optional[OverlayMode] = None,
+        width: Optional[int] = None,
+        wrap: Optional[WrapStyle] = None,
+    ) -> None:
+        """
+        Parameters
+        ----------
+        font: :class:`Font`
+            The font to use to render the text.
+        text: str
+            The text to render.
+        fill: :class:`Pixel`
+            The fill color the text will be in.
+        position: Optional[Tuple[int, int]]
+            The position the text will be rendered at.
+            **This must be set before adding any text segments!**
+            Either with :attr:`position` or by passing it to the constructor.
+        size: Optional[float]
+            The size of the text in pixels.
+        overlay: Optional[:class:`OverlayMode`]
+           The overlay mode to use when rendering the text.
+        width: Optional[int]
+           The width of the text layout.
+        wrap: Optional[:class:`WrapStyle`]
+            The wrapping style of the text. Note that text will only wrap if `width` is set.
+            If this is used in a :class:`TextLayout`, this is ignored and :attr:`.WrapStyle.Wrap` is used instead.
+       
+        .. warning::
+            As this class contains the data of an entire font, copying this class is expensive.
+        """
+    
+    @property
+    def position(self) -> Tuple[int, int]:
+        """Tuple[int, int]: The position of the text segment."""
+    
+    @property
+    def width(self) -> Optional[int]:
+        """
+        float: The width of the text box.
+       
+        .. warning::
+            If this is used in a :class:`TextLayout`, this is ignored and :meth:`TextLayout.width` is used instead.
+        """
+    
+    @property
+    def text(self) -> str:
+        """str: The content of the text segment."""
+    
+    @property
+    def font(self) -> Font:
+        """
+        :class:`Font`: The font of the text segment.
+       
+        .. warning::
+            Due to design limitation, accessing font requires a deep clone each time, which is expensive.
+        """
+    
+    @property
+    def fill(self) -> Pixels:
+        """List[List[Union[:class:`.BitPixel`, :class:`.L`, :class:`.Rgb`, :class:`.Rgba`]]]: The fill color of the text segment."""
+    
+    @property
+    def overlay(self) -> OverlayMode:
+        """Optional[:class:`OverlayMode`]: The overlay mode of the text segment."""
+    
+    @property
+    def size(self) -> float:
+        """float: The size of the text segment in pixels."""
+    
+    @property
+    def wrap(self) -> WrapStyle:
+        """:class:`WrapStyle`: The wrapping style of the text segment."""
+    
+    @position.setter
+    def set_position(self, position: Tuple[int, int]) -> None:
+        ...
+    
+    @width.setter
+    def set_width(self, width: int) -> None:
+        ...
+    
+    @text.setter
+    def set_text(self, text: str) -> None:
+        ...
+    
+    @font.setter
+    def set_font(self, font: Font) -> None:
+        ...
+    
+    @fill.setter
+    def set_fill(self, fill: Pixel) -> None:
+        ...
+    
+    @overlay.setter
+    def set_overlay(self, overlay: OverlayMode) -> None:
+        ...
+    
+    @size.setter
+    def set_size(self, size: float) -> None:
+        ...
+    
+    @wrap.setter
+    def set_wrap(self, wrap: WrapStyle) -> None:
+        ...
+
+
+class TextLayout:
+    """
+    Represents a high-level text layout that can layout text segments, maybe with different fonts.
+   
+    This is a high-level layout that can be used to layout text segments.
+    It can be used to layout text segments with different fonts and styles, and has many features over :class:`TextSegment` such as text anchoring,
+    which can be useful for text alignment.
+    This also keeps track of font metrics, meaning that unlike :class:`TextSegment`,
+    this can be used to determine the width and height of text before rendering it.
+   
+    This is less efficient than :class:`TextSegment` and you should use :class:`TextSegment` if you don't need any of the features TextLayout provides.
+    """
+    def __init__(
+        self,
+        position: Optional[Tuple[int, int]] = None,
+        width: Optional[int] = None,
+        height: Optional[int] = None,
+        horizontal_anchor: Optional[HorizontalAnchor] = None,
+        vertical_anchor: Optional[VerticalAnchor] = None,
+        wrap: Optional[WrapStyle] = None,
+    ) -> None:
+        """
+        Parameters
+        ----------
+        position: Optional[Tuple[int, int]]
+            The position the text will be rendered at.
+            **This must be set before adding any text segments!**
+            Either with :attr:`position` or by passing it to the constructor.
+
+        horizontal_anchor: Optional[:class:`.HorizontalAnchor`]
+           The horizontal anchor of the text.   
+        
+        vertical_anchor: Optional[:class:`.VerticalAnchor`]
+            The vertical anchor of the text.
+
+        wrap: Optional[:class:`.WrapStyle`]
+           Sets the wrapping style of the text. Make sure to also set the wrapping width using :attr:`width` for wrapping to work.
+            **This must be set before adding any text segments!**
+       
+        .. warning::
+            As this class contains the data of one or more font(s), copying this class can be extremely expensive.
+        """
+    
+    def center(self) -> None:
+        """
+        Sets the horizontal anchor and vertial anchor of the text to be centered. 
+        This makes the position of the text be the center as opposed to the top-left corner.
+        """
+    
+    @property
+    def bounding_box(self) -> Tuple[int, int, int, int]:
+        """
+        Tuple[int, int, int, int]: Returns the bounding box of the text. 
+        Left and top bounds are inclusive; right and bottom bounds are exclusive.
+        """
+    
+    @property
+    def dimensions(self) -> Tuple[int, int]:
+        """
+        Tuple[int, int]: Returns the width and height of the text.
+        
+        .. warning::
+            This is a slightly expensive operation and is not a simple getter.
+        
+        .. note::
+            If you want both width and height, use :attr:`dimensions`.
+        """
+    
+    @property
+    def height(self) -> int:
+        """
+        int: Returns the height of the text.
+        
+        .. warning::
+            This is a slightly expensive operation and is not a simple getter.
+        
+        .. note::
+            If you want both width and height, use :attr:`dimensions`.
+        """
+    
+    @property
+    def width(self) -> int:
+        """
+        int: Returns the width of the text.
+        
+        .. warning::
+           This is a slightly expensive operation and is not a simple getter.
+        
+        .. note::
+           If you want both width and height, use :attr:`dimensions`.
+        """
+
+
+class Font:
+    """
+    Represents a single font along with its alternatives used to render text. Currently, this supports TrueType and OpenType fonts.
+    """
+    @classmethod
+    def open(cls, path: str, optimal_size: float) -> Font:
+        """
+        Opens the font from the given path.
+       
+        .. note::
+            The optimal size is not the fixed size of the font - rather it is the size to optimize rasterizing the font for.
+       
+            Lower sizes will look worse but perform faster, while higher sizes will look better but perform slower.
+            It is best to set this to the size that will likely be the most use
+       
+        Parameters
+        ----------
+        path: str
+            The path of the font.
+        optimal_size: float
+            The optimal size of the font.
+       
+        Raises
+        ------
+        IOError
+            Fails to read the font file.
+        RuntimeError
+            Fails to load the font.
+       
+        .. seealso::
+            :meth:`from_bytes`
+        """
+    
+    @classmethod
+    def from_bytes(cls, bytes: bytes, optimal_size: float) -> Font:
+        """
+        Loads the font from the given bytes.
+       
+        .. note::
+            The optimal size is not the fixed size of the font - rather it is the size to optimize rasterizing the font for.
+       
+            Lower sizes will look worse but perform faster, while higher sizes will look better but perform slower.
+            It is best to set this to the size that will likely be the most use
+       
+        Parameters
+        ----------
+        path: str
+            The path of the font.
+        optimal_size: float
+            The optimal size of the font.
+       
+        Raises
+        ------
+        IOError
+            Fails to read the font file.
+        RuntimeError
+            Fails to load the font.
+        """
+    
+    @property
+    def optimal_size(self) -> float:
+        """
+        float: Returns the optimal size, in pixels, of this font.
+       
+        ..note::
+            The optimal size is not the fixed size of the font - rather it is the size to optimize rasterizing the font for.
+       
+            Lower sizes will look worse but perform faster, while higher sizes will look better but perform slower.
+            It is best to set this to the size that will likely be the most used.
+        """
+
+
 R: TypeAlias = ResizeAlgorithm
 
 
@@ -741,6 +1033,45 @@ D: TypeAlias = DisposalMethod
 
 
 class DisposalMethod:
+    """The method used to dispose a frame before transitioning to the next frame in an image sequence."""
     Keep: D
     Background: D
     Previous: D
+
+
+W: TypeAlias = WrapStyle
+
+class WrapStyle:
+    """The style used to wrap text."""
+    Repeat: W
+    Reflect: W
+    Clamp: W
+
+
+O: TypeAlias = OverlayMode
+
+
+class OverlayMode:
+    """The mode used to overlay an image onto another image."""
+    Replace: O
+    Merge: O
+
+
+H: TypeAlias = HorizontalAnchor
+
+
+class HorizontalAnchor:
+    """The horizontal anchor of a text."""
+    Left: H
+    Center: H
+    Right: H
+
+
+V: TypeAlias = VerticalAnchor
+
+
+class VerticalAnchor:
+    """The vertical anchor of a text."""
+    Top: V
+    Center: V
+    Bottom: V
