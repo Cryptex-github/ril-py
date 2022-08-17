@@ -48,8 +48,8 @@ use crate::{
 ///     The wrapping style of the text. Note that text will only wrap if `width` is set.
 ///     If this is used in a :class:`TextLayout`, this is ignored and :attr:`.WrapStyle.Wrap` is used instead.
 ///
-/// .. warning::
 /// 
+/// .. warning::
 ///     As this class contains the data of an entire font, copying this class is expensive.
 #[pyclass]
 #[derive(Clone)]
@@ -225,7 +225,6 @@ impl TextSegment {
 ///
 /// 
 /// .. warning::
-/// 
 ///     As this class contains the data of one or more font(s), copying this class can be extremely expensive.
 #[pyclass]
 #[derive(Clone)]
@@ -455,8 +454,8 @@ impl Font {
     /// RuntimeError
     ///     Fails to load the font.
     ///
-    /// .. seealso::
     /// 
+    /// .. seealso::
     ///     :meth:`from_bytes`
     #[classmethod]
     #[pyo3(text_signature = "(cls, path, optimal_size)")]

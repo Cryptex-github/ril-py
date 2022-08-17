@@ -106,6 +106,8 @@ jobs:
       run: cibuildwheel --output-dir wheelhouse
       env:
         CIBW_BUILD: '${{ matrix.python-version }}-*'
+        # rust doesn't seem to be available for musl linux on i686
+        CIBW_SKIP: '*-musllinux_i686'
         # we build for "alt_arch_name" if it exists, else 'auto'
         CIBW_ARCHS: ${{ matrix.alt_arch_name || 'auto' }}
         CIBW_ENVIRONMENT: 'PATH="$HOME/.cargo/bin:$PATH" CARGO_TERM_COLOR="always"'
