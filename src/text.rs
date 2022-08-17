@@ -447,7 +447,7 @@ impl Font {
     /// .. seealso::
     ///     :meth:`from_bytes`
     #[classmethod]
-    #[pyo3(text_signature = "cls, path, optimal_size")]
+    #[pyo3(text_signature = "(cls, path, optimal_size)")]
     fn open(_: &PyType, path: PathBuf, optimal_size: f32) -> Result<Self, Error> {
         Ok(Self {
             inner: RilFont::open(path, optimal_size)?,
@@ -476,7 +476,7 @@ impl Font {
     /// RuntimeError
     ///     Fails to load the font.
     #[classmethod]
-    #[pyo3(text_signature = "cls, bytes, optimal_size")]
+    #[pyo3(text_signature = "(cls, bytes, optimal_size)")]
     fn from_bytes(_: &PyType, bytes: &[u8], optimal_size: f32) -> Result<Self, Error> {
         Ok(Self {
             inner: RilFont::from_bytes(bytes, optimal_size)?,

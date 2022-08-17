@@ -2,6 +2,9 @@ name: Python Binding
 
 on: [push, pull_request]
 
+env:
+  CARGO_TERM_COLOR: always
+
 jobs:
   build: # Workflow credit to https://github.com/samuelcolvin/rtoml/blob/main/.github/workflows/ci.yml
     name: >
@@ -107,7 +110,7 @@ jobs:
         CIBW_SKIP: '*-musllinux_i686'
         # we build for "alt_arch_name" if it exists, else 'auto'
         CIBW_ARCHS: ${{ matrix.alt_arch_name || 'auto' }}
-        CIBW_ENVIRONMENT: 'PATH="$HOME/.cargo/bin:$PATH"'
+        CIBW_ENVIRONMENT: 'PATH="$HOME/.cargo/bin:$PATH" CARGO_TERM_COLOR="always"'
         CIBW_ENVIRONMENT_WINDOWS: 'PATH="$UserProfile\.cargo\bin;$PATH"'
         CIBW_BEFORE_BUILD: rustup show
         CIBW_BEFORE_BUILD_LINUX: >
