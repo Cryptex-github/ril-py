@@ -139,13 +139,13 @@ class Image:
         Parameters
         ----------
         x1: int
-            x1
+           The x axis of the upper-left corner
         y1: int
-            y1
+            The y axis of the upper-left corner
         x2: int
-            x2
+            The x axis of the lower-right corner
         y2: int
-            y2
+            The y axis of the lower-right corner
         """
 
     def draw(self, entity: Union[Rectangle, Ellipse]) -> None:
@@ -158,7 +158,7 @@ class Image:
             The entity to draw on the image.
         """
 
-    def resize(self, width: int, height: int, algo: ResizeAlgorithm) -> None:
+    def resize(self, width: int, height: int, algorithm: ResizeAlgorithm) -> None:
         """
         Resizes this image in place to the given dimensions using the given resizing algorithm in place.
         
@@ -168,7 +168,7 @@ class Image:
             The target width to resize to
         height: int
             The target height to resize to
-        algo: :class:`.ResizeAlgorithm`
+        algorithm: :class:`.ResizeAlgorithm`
             The resize algorithm to use
         """
 
@@ -407,9 +407,18 @@ class Ellipse:
         Parameters
         ----------
         x1: int
+            The x axis of the upper left corner
         y1: int
+            The y axis of the upper left corner
         x2: int
+            The x axis of the lower right corner
         y2: int
+            The y axis of the lower right corner
+        
+        Returns
+        -------
+        :class:`.Ellipse`
+            The newly created ellipse
         """
 
     @classmethod
@@ -480,9 +489,18 @@ class Rectangle:
         Parameters
         ----------
         x1: int
+            The x axis of the upper left corner
         y1: int
+            The y axis of the upper left corner
         x2: int
+            The x axis of the lower right corner
         y2: int
+            The y axis of the lower right corner
+        
+        Returns
+        -------
+        :class:`.Rectangle`
+            The newly created rectangle
         """
 
 
@@ -759,7 +777,9 @@ class TextSegment:
             The fill color the text will be in.
         position: Optional[Tuple[int, int]]
             The position the text will be rendered at.
+
             **This must be set before adding any text segments!**
+
             Either with :attr:`position` or by passing it to the constructor.
         size: Optional[float]
             The size of the text in pixels.
@@ -876,7 +896,9 @@ class TextLayout:
         ----------
         position: Optional[Tuple[int, int]]
             The position the text will be rendered at.
+
             **This must be set before adding any text segments!**
+            
             Either with :attr:`position` or by passing it to the constructor.
 
         horizontal_anchor: Optional[:class:`.HorizontalAnchor`]
@@ -887,6 +909,7 @@ class TextLayout:
 
         wrap: Optional[:class:`.WrapStyle`]
            Sets the wrapping style of the text. Make sure to also set the wrapping width using :attr:`width` for wrapping to work.
+
             **This must be set before adding any text segments!**
        
         .. warning::

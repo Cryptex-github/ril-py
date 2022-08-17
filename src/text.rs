@@ -34,7 +34,9 @@ use crate::{
 ///     The fill color the text will be in.
 /// position: Optional[Tuple[int, int]]
 ///     The position the text will be rendered at.
+/// 
 ///     **This must be set before adding any text segments!**
+/// 
 ///     Either with :attr:`position` or by passing it to the constructor.
 /// size: Optional[float]
 ///     The size of the text in pixels.
@@ -47,6 +49,7 @@ use crate::{
 ///     If this is used in a :class:`TextLayout`, this is ignored and :attr:`.WrapStyle.Wrap` is used instead.
 ///
 /// .. warning::
+/// 
 ///     As this class contains the data of an entire font, copying this class is expensive.
 #[pyclass]
 #[derive(Clone)]
@@ -204,7 +207,9 @@ impl TextSegment {
 /// ----------
 /// position: Optional[Tuple[int, int]]
 ///     The position the text will be rendered at.
+/// 
 ///     **This must be set before adding any text segments!**
+/// 
 ///     Either with :attr:`position` or by passing it to the constructor.
 
 /// horizontal_anchor: Optional[:class:`.HorizontalAnchor`]
@@ -215,9 +220,12 @@ impl TextSegment {
 
 /// wrap: Optional[:class:`.WrapStyle`]
 ///    Sets the wrapping style of the text. Make sure to also set the wrapping width using :attr:`width` for wrapping to work.
+/// 
 ///     **This must be set before adding any text segments!**
 ///
+/// 
 /// .. warning::
+/// 
 ///     As this class contains the data of one or more font(s), copying this class can be extremely expensive.
 #[pyclass]
 #[derive(Clone)]
@@ -344,6 +352,7 @@ impl TextLayout {
 
     /// Sets the width of the text layout.
     /// This does not impact :attr:`dimensions`.
+    /// 
     /// **This must be set before adding any text segments!**
     #[setter]
     fn set_width(&mut self, width: u32) -> Result<(), Error> {
@@ -354,6 +363,7 @@ impl TextLayout {
 
     /// Sets the wrapping style of the text layout.
     /// Make sure to also set the wrapping width using :attr:`width` for wrapping to work.
+    /// 
     /// **This must be set before adding any text segments!**
     #[setter]
     fn set_wrap(&mut self, wrap: WrapStyle) -> Result<(), Error> {
@@ -425,6 +435,7 @@ impl Font {
     /// Opens the font from the given path.
     ///
     /// .. note::
+    /// 
     ///     The optimal size is not the fixed size of the font - rather it is the size to optimize rasterizing the font for.
     ///
     ///     Lower sizes will look worse but perform faster, while higher sizes will look better but perform slower.
@@ -445,6 +456,7 @@ impl Font {
     ///     Fails to load the font.
     ///
     /// .. seealso::
+    /// 
     ///     :meth:`from_bytes`
     #[classmethod]
     #[pyo3(text_signature = "(cls, path, optimal_size)")]
@@ -485,7 +497,7 @@ impl Font {
 
     /// float: Returns the optimal size, in pixels, of this font.
     ///
-    /// ..note::
+    /// .. note::
     ///     The optimal size is not the fixed size of the font - rather it is the size to optimize rasterizing the font for.
     ///
     ///     Lower sizes will look worse but perform faster, while higher sizes will look better but perform slower.

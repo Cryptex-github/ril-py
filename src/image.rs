@@ -259,13 +259,13 @@ impl Image {
     /// Parameters
     /// ----------
     /// x1: int
-    ///     x1
+    ///    The x axis of the upper-left corner
     /// y1: int
-    ///     y1
+    ///     The y axis of the upper-left corner
     /// x2: int
-    ///     x2
+    ///     The x axis of the lower-right corner
     /// y2: int
-    ///     y2
+    ///     The y axis of the lower-right corner
     #[pyo3(text_signature = "(self, x1, y1, x2, y2)")]
     fn crop(&mut self, x1: u32, y1: u32, x2: u32, y2: u32) {
         self.inner.crop(x1, y1, x2, y2);
@@ -290,11 +290,11 @@ impl Image {
     ///     The target width to resize to
     /// height: int
     ///     The target height to resize to
-    /// algo: :class:`.ResizeAlgorithm`
+    /// algorithm: :class:`.ResizeAlgorithm`
     ///     The resize algorithm to use
-    #[pyo3(text_signature = "(self, width, height, algo)")]
-    fn resize(&mut self, width: u32, height: u32, algo: ResizeAlgorithm) {
-        self.inner.resize(width, height, algo.into());
+    #[pyo3(text_signature = "(self, width, height, algorithm)")]
+    fn resize(&mut self, width: u32, height: u32, algorithm: ResizeAlgorithm) {
+        self.inner.resize(width, height, algorithm.into());
     }
 
     /// Encodes the image with the given encoding and returns `bytes`.

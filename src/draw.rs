@@ -188,9 +188,17 @@ impl Ellipse {
     /// Parameters
     /// ----------
     /// x1: int
+    ///    The x axis of the upper-left corner
     /// y1: int
+    ///     The y axis of the upper-left corner
     /// x2: int
+    ///     The x axis of the lower-right corner
     /// y2: int
+    ///     The y axis of the lower-right corner
+    /// 
+    /// Returns
+    /// -------
+    /// :class:`.Ellipse`
     #[classmethod]
     #[pyo3(text_signature = "(cls, x1, y1, x2, y2)")]
     fn from_bounding_box(_: &PyType, x1: u32, y1: u32, x2: u32, y2: u32) -> Self {
@@ -361,9 +369,13 @@ impl Rectangle {
     /// Parameters
     /// ----------
     /// x1: int
+    ///    The x axis of the upper-left corner
     /// y1: int
+    ///     The y axis of the upper-left corner
     /// x2: int
+    ///     The x axis of the lower-right corner
     /// y2: int
+    ///     The y axis of the lower-right corner
     #[classmethod]
     #[pyo3(text_signature = "(cls, x1, y1, x2, y2)")]
     fn from_bounding_box(_: &PyType, x1: u32, y1: u32, x2: u32, y2: u32) -> Self {

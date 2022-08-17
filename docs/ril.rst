@@ -86,7 +86,7 @@ Enums
 
     The method used to dispose a frame before transitioning to the next frame in an image sequence.
 
-    .. attribute:: Null
+    .. attribute:: Keep
 
         Do not dispose the current frame. Usually not desired for transparent images.
     
