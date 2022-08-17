@@ -163,3 +163,29 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: wheelhouse/*
+  
+  website:
+    needs: [build]
+    if: "success() && github.ref == 'refs/heads/main'"
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: get wheelhouse artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: wheels
+        path: wheels
+    
+    - run: mv wheels site/
+
+    - name: Run template
+      run: python .github/workflows/scripts/site_template.py
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      if: ${{ github.ref == 'refs/heads/main' }}
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: site
