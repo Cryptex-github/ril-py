@@ -22,13 +22,13 @@ By the first stable release, we plan to support the following image encodings:
 
 ## Installation
 
-**This package is published to pypi under the name `pyril` due to a pypi limitation.
+**This package is published on pypi under the name `pyril` due to a pypi limitation.
 
 It will be published under `ril` in the future, if possible.
 
 ### Prebuilt wheels
 
-There will be prebuilt wheels for those platforms:
+There will be prebuilt wheels for these platforms:
 
 * Linux x86-64: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
 * MacOS x86-64: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
@@ -38,9 +38,9 @@ There will be prebuilt wheels for those platforms:
 
 If you want another platform to have prebuilt wheels, please open an issue.
 
-CPython 3.11 support will be available once its ABI has been stablized. 
+CPython 3.11 support will be available once its ABI has been stabilized. 
 
-If your platform have prebuilt wheels, installing is as simple as
+If your platform has prebuilt wheels, installing is as simple as
 
 ```
 pip install pyril
