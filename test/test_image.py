@@ -1,4 +1,3 @@
-import requests
 import ril
 from ril import Rgba
 
