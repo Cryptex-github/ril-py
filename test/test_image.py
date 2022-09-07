@@ -1,5 +1,4 @@
-import ril
-from ril import Rgba
+from ril import Image, ImageSequence, Pixel, Rgba
 
 PIXELS = [
     Rgba(255, 0, 0, 255),
@@ -17,19 +16,19 @@ PIXELS = [
 ]
 
 def test_create_image() -> None:
-    image = ril.Image.new(1, 1, ril.Pixel.from_rgb(255, 255, 255))
+    image = Image.new(1, 1, Pixel.from_rgb(255, 255, 255))
     
     assert image.height == 1
     assert image.width == 1
     assert image.dimensions == (1, 1)
 
 def test_image_pixels() -> None:
-    image = ril.Image.new(1, 1, ril.Pixel.from_rgb(255, 255, 255))
+    image = Image.new(1, 1, Pixel.from_rgb(255, 255, 255))
 
     image.pixels()
 
 def test_gif_decode(fetch_file) -> None:
-    for i, frame in enumerate(ril.ImageSequence.from_bytes(fetch_file('sample_rgba.gif'))):
+    for i, frame in enumerate(ImageSequence.from_bytes(fetch_file('sample_rgba.gif'))):
         frame = frame.image
 
         assert frame.dimensions == (256, 256)
