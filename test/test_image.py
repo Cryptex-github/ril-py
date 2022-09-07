@@ -29,7 +29,5 @@ def test_image_pixels() -> None:
 
 def test_gif_decode(fetch_file) -> None:
     for i, frame in enumerate(ImageSequence.from_bytes(fetch_file('sample_rgba.gif'))):
-        frame = frame.image
-
         assert frame.dimensions == (256, 256)
-        assert frame.get_pixel(0, 0) == PIXELS[i]
+        assert frame.image.get_pixel(0, 0) == PIXELS[i]
