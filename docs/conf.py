@@ -10,7 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
+import re
 
 # -- Project information -----------------------------------------------------
 
@@ -19,7 +19,14 @@ copyright = '2022, Cryptex'
 author = 'Cryptex'
 
 # The full version, including alpha/beta/rc tags
-release = '0.2.1'
+
+with open('../pyproject.toml') as f:
+    matches = re.match(r'^version\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE)
+
+    if matches:
+        release = matches.group(0)
+    else:
+        raise RuntimeError('Unable to find version string in pyproject.toml')
 
 
 # -- General configuration ---------------------------------------------------
