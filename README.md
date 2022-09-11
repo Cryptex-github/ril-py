@@ -24,7 +24,7 @@ By the first stable release, we plan to support the following image encodings:
 
 ### Prebuilt wheels
 
-There will be prebuilt wheels for those platforms:
+There will be prebuilt wheels for these platforms:
 
 * Linux x86-64: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
 * MacOS x86-64: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
@@ -34,9 +34,9 @@ There will be prebuilt wheels for those platforms:
 
 If you want another platform to have prebuilt wheels, please open an issue.
 
-CPython 3.11 support will be available once its ABI has been stablized. 
+CPython 3.11 support will be available once its ABI has been stabilized. 
 
-If your platform have prebuilt wheels, installing is as simple as
+If your platform has prebuilt wheels, installing is as simple as
 
 ```
 pip install ril
