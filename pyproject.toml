@@ -1,6 +1,6 @@
 [project]
 name = "ril"
-version = "0.2.1.post6"
+version = "0.4.0"
 license = { text = "MIT" }
 authors = [ { name = "Cryptex" } ]
 requires-python = ">=3.7"

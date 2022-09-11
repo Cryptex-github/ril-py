@@ -1,7 +1,7 @@
 [package]
 name = "ril-py"
 authors = ["Cryptex"]
-version = "0.2.1"
+version = "0.4.0"
 license = "MIT"
 edition = "2021"
 description = "Rust Imaging Library's Python binding: A performant and high-level image processing library for Python written in Rust"

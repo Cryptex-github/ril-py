@@ -20,13 +20,15 @@ author = 'Cryptex'
 
 # The full version, including alpha/beta/rc tags
 
-with open('../pyproject.toml') as f:
-    matches = re.match(r'^version\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE)
+# with open('../pyproject.toml') as f:
+#     matches = re.search(r'^version\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE)
 
-    if matches:
-        release = matches.group(0)
-    else:
-        raise RuntimeError('Unable to find version string in pyproject.toml')
+#     if matches:
+#         release = matches.group(0)
+#     else:
+#         raise RuntimeError('Unable to find version string in pyproject.toml')
+
+release = '0.4.0'
 
 
 # -- General configuration ---------------------------------------------------
