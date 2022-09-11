@@ -390,9 +390,9 @@ impl Image {
             .collect::<Vec<Vec<PyObject>>>()
     }
 
-    /// Pastes the given image onto this image at the given x and y axiss.
+    /// Pastes the given image onto this image at the given x and y axis.
     ///
-    /// If `maske` is provided it will be masked with the given masking image.
+    /// If `mask` is provided it will be masked with the given masking image.
     ///
     /// Currently, only BitPixel images are supported for the masking image.
     ///

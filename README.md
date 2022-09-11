@@ -22,10 +22,6 @@ By the first stable release, we plan to support the following image encodings:
 
 ## Installation
 
-**This package is published to pypi under the name `pyril` due to a pypi limitation.
-
-It will be published under `ril` in the future, if possible.
-
 ### Prebuilt wheels
 
 There will be prebuilt wheels for those platforms:
@@ -43,7 +39,7 @@ CPython 3.11 support will be available once its ABI has been stablized.
 If your platform have prebuilt wheels, installing is as simple as
 
 ```
-pip install pyril
+pip install ril
 ```
 
 ### Building from Source
@@ -52,7 +48,7 @@ In order to build from source, you will need to have the Rust compiler available
 Then building is as simple as
 
 ```
-pip install pyril
+pip install ril
 ```
 
 or from Github
