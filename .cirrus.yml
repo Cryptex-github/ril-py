@@ -19,7 +19,7 @@ task:
   
   install_script:
     - pip install -U setuptools wheel cibuildwheel
-    - apt update && apt install podman
+    - apt update && apt install podman -y
   
   build_script:
     cibuildwheel --output-dir wheelhouse
