@@ -18,8 +18,8 @@ task:
     CIBW_CONTAINER_ENGINE: podman
   
   install_script:
-    pip install -U setuptools wheel cibuildwheel
-    apt install podman
+    - pip install -U setuptools wheel cibuildwheel
+    - apt install podman
   
   build_script:
     cibuildwheel --output-dir wheelhouse
