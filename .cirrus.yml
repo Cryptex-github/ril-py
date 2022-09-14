@@ -18,7 +18,6 @@ task:
     CIBW_TEST_COMMAND: 'pytest {project}/test'
     CIBW_TEST_REQUIRES: pytest requests
     CIBW_BUILD_VERBOSITY: 1
-    CIBW_CONTAINER_ENGINE: podman
   
   install_script:
     - apt update && apt install python3-venv python-is-python3 -y
