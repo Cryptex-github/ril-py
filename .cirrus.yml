@@ -11,7 +11,7 @@ task:
   env:
     CIBW_BUILD: 'cp310-* pp37-* pp38-* pp39-*'
     CIBW_ARCHS: aarch64
-    CIBW_ENVIRONMENT: 'PATH="$HOME/.cargo/bin:$PATH" CARGO_TERM_COLOR="always"'
+    CIBW_ENVIRONMENT: 'PATH="$PATH:$HOME/.cargo/bin" CARGO_TERM_COLOR="always"'
     CIBW_BEFORE_BUILD_LINUX: >
       curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=stable --profile=minimal -y &&
       rustup show
