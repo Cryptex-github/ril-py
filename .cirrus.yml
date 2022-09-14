@@ -20,7 +20,7 @@ task:
     CIBW_BUILD_VERBOSITY: 1
   
   install_script:
-    - apt update && apt install python3-venv python-is-python3 -y
+    - apt update && apt install python3 -y
     - pip install -U setuptools wheel cibuildwheel
   
   build_script:
