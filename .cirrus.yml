@@ -1,7 +1,10 @@
 task:
   name: Build aarch64 Linux
-  arm_container:
-    image: python:3-slim
+  compute_engine_instance:
+    image_project: cirrus-images
+    image: family/docker-builder-arm64
+    architecture: arm64
+    platform: linux
     cpu: 8
     memory: 8G
   
@@ -18,8 +21,8 @@ task:
     CIBW_CONTAINER_ENGINE: podman
   
   install_script:
+    - apt update && apt install python3-venv python-is-python3 -y
     - pip install -U setuptools wheel cibuildwheel
-    - apt update && apt install podman -y
   
   build_script:
     cibuildwheel --output-dir wheelhouse
