@@ -15,9 +15,11 @@ task:
     CIBW_TEST_COMMAND: 'pytest {project}/test'
     CIBW_TEST_REQUIRES: pytest requests
     CIBW_BUILD_VERBOSITY: 1
+    CIBW_CONTAINER_ENGINE: podman
   
   install_script:
     pip install -U setuptools wheel cibuildwheel
+    apt install podman
   
   build_script:
     cibuildwheel --output-dir wheelhouse
