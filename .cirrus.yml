@@ -1,8 +1,9 @@
 task:
   name: Build aarch64 Linux
-  arm_container: python:3-slim
-  cpu: 8
-  memory: 8G
+  arm_container:
+    image: python:3-slim
+    cpu: 8
+    memory: 8G
   
   env:
     CIBW_BUILD: 'cp310-* pp37-* pp38-* pp39-*'
