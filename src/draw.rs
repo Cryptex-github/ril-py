@@ -10,13 +10,13 @@ use ril::{
         Border as RilBorder, BorderPosition as RilBorderPosition, Ellipse as RilEllipse,
         Rectangle as RilRectangle,
     },
-    Draw, Dynamic,
+    Dynamic,
 };
 
 use crate::{
     pixels::Pixel,
     utils::{cast_pixel_to_pyobject},
-    Xy, text::TextSegment, types::OverlayMode,
+    Xy, text::{TextSegment, TextLayout}, types::OverlayMode,
 };
 
 fn get_border_position(position: &str) -> PyResult<RilBorderPosition> {
@@ -464,10 +464,10 @@ impl Rectangle {
 }
 
 macro_rules! impl_draw_entities {
-    ($obj:expr, $( $class:ty ),*) => {{
+    ($obj:expr, $( $class:ident ),*) => {{
         $(
             match $obj.extract::<$class>() {
-                Ok(r) => return Ok(Self(Box::new(r.inner), PhantomData)),
+                Ok(r) => return Ok(DrawEntity::$class(r)),
                 Err(_) => ()
             }
         )*
@@ -478,10 +478,17 @@ macro_rules! impl_draw_entities {
     }};
 }
 
-pub struct DrawEntity<'a>(pub Box<dyn Draw<Dynamic>>, PhantomData<&'a ()>);
+#[allow(dead_code)]
+pub enum DrawEntity<'a> {
+    Rectangle(Rectangle),
+    Ellipse(Ellipse),
+    TextSegment(TextSegment),
+    TextLayout(TextLayout),
+    PhantomData(PhantomData<&'a ()>)
+}
 
 impl<'a> FromPyObject<'a> for DrawEntity<'a> {
     fn extract(obj: &'a PyAny) -> PyResult<Self> {
-        impl_draw_entities!(obj, Rectangle, Ellipse, TextSegment)
+        impl_draw_entities!(obj, Rectangle, Ellipse, TextSegment, TextLayout)
     }
 }

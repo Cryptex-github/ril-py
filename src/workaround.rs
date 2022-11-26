@@ -1,3 +1,5 @@
+use std::ops::DerefMut;
+
 use ril::{Font, Draw, Pixel, OverlayMode, WrapStyle, Image, HorizontalAnchor, VerticalAnchor};
 use fontdue::layout::{CoordinateSystem, TextStyle, Layout, LayoutSettings};
 
@@ -173,7 +175,7 @@ fn render_layout_as_ref<P: Pixel>(
 
 fn render_layout<P: Pixel>(
     image: &mut Image<P>,
-    fonts: &Vec<fontdue::Font>,
+    fonts: &[&fontdue::Font],
     layout: &Layout<(P, OverlayMode)>,
 ) {
     let glyphs = layout.glyphs();
@@ -270,8 +272,8 @@ fn render_layout_with_alignment<P: Pixel>(
 }
 
 impl<P: Pixel> Draw<P> for OwnedTextSegment<P> {
-    fn draw(&self, image: &mut Image<P>) {
-        render_layout_as_ref(image, self.font.inner(), &self.layout());
+    fn draw<I: DerefMut<Target = Image<P>>>(&self, mut image: I) {
+        render_layout_as_ref(&mut *image, self.font.inner(), &self.layout());
     }
 }
 
@@ -289,6 +291,7 @@ impl<P: Pixel> Draw<P> for OwnedTextSegment<P> {
 /// # Note
 /// This is does not implement [`Clone`] and therefore it is not cloneable! Consider using
 /// [`TextSegment`] if you require cloning functionality.
+
 pub struct OwnedTextLayout<P: Pixel> {
     inner: Layout<(P, OverlayMode)>,
     fonts: Vec<fontdue::Font>,
@@ -440,7 +443,7 @@ impl<P: Pixel> OwnedTextLayout<P> {
             let right = glyph.x + glyph.width as f32;
             let line_width = (right - x as f32).ceil() as u32;
             widths.push(line_width);
-            max_width = max_width.max(line_width);
+            max_width = Ord::max(max_width, line_width);
         }
 
         (widths, max_width, self.inner.height() as u32)
@@ -468,7 +471,7 @@ impl<P: Pixel> OwnedTextLayout<P> {
 
                 let right = glyph.x + glyph.width as f32;
                 let line_width = (right - x as f32).ceil() as u32;
-                width = width.max(line_width);
+                width = Ord::max(width, line_width);
 
                 break;
             }
@@ -536,11 +539,13 @@ impl<P: Pixel> OwnedTextLayout<P> {
     }
 }
 
-impl<X: Pixel> Draw<X> for OwnedTextLayout<X> {
-    fn draw(&self, image: &mut Image<X>) {
+impl<P: Pixel> Draw<P> for OwnedTextLayout<P> {
+    fn draw<I: DerefMut<Target = Image<P>>>(&self, mut image: I) {
+        let image = &mut *image;
+
         // Skips the calculation of offsets
         if self.x_anchor == HorizontalAnchor::Left && self.y_anchor == VerticalAnchor::Top {
-            render_layout(image, &self.fonts, &self.inner);
+            render_layout(image, &self.fonts.iter().collect::<Vec<&fontdue::Font>>()[..], &self.inner);
         }
 
         let (widths, max_width, fx, ox, oy) = self.calculate_offsets();

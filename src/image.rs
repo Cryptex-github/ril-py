@@ -11,7 +11,7 @@ use pyo3::{
     prelude::*,
     types::{PyTuple, PyType},
 };
-use ril::{Banded, Dynamic, Image as RilImage, ImageFormat};
+use ril::{Banded, Dynamic, Image as RilImage, ImageFormat, Draw as _};
 
 /// A high-level image representation.
 ///
@@ -278,8 +278,16 @@ impl Image {
     /// entity: Union[:class:`.Rectangle`, :class:`.Ellipse`]
     ///     The entity to draw on the image.
     #[pyo3(text_signature = "(self, entity)")]
-    fn draw(&mut self, entity: DrawEntity) {
-        entity.0.draw(&mut self.inner);
+    fn draw(&mut self, entity: DrawEntity) -> Result<(), Error>{
+        match entity {
+            DrawEntity::Rectangle(e) => e.inner.draw(&mut self.inner),
+            DrawEntity::Ellipse(e) => e.inner.draw(&mut self.inner),
+            DrawEntity::TextSegment(e) => e.inner.draw(&mut self.inner),
+            DrawEntity::TextLayout(e) => e.inner.write()?.draw(&mut self.inner),
+            DrawEntity::PhantomData(_) => {},
+        };
+
+        Ok(())
     }
 
     /// Resizes this image in place to the given dimensions using the given resizing algorithm in place.

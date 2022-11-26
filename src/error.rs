@@ -25,7 +25,9 @@ impl From<Error> for PyErr {
                 | RilError::DecodingError(_)
                 | RilError::UnknownEncodingFormat
                 | RilError::FontError(_)
-                | RilError::IncompatibleImageData { .. } => {
+                | RilError::IncompatibleImageData { .. }
+                | RilError::InvalidPaletteIndex
+                | RilError::QuantizationOverflow { .. } => {
                     PyRuntimeError::new_err(format!("{}", err))
                 }
                 RilError::IOError(_) => PyIOError::new_err(format!("{}", err)),

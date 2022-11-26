@@ -1,7 +1,7 @@
-use pyo3::{exceptions::PyRuntimeError, prelude::*, types::PyType};
-use ril::{Draw, Dynamic, Font as RilFont};
+use pyo3::{prelude::*, types::PyType};
+use ril::{Dynamic, Font as RilFont};
 
-use std::{marker::PhantomData, path::PathBuf, sync::{Arc, RwLock}};
+use std::{path::PathBuf, sync::{Arc, RwLock}};
 
 use crate::{
     error::Error,
@@ -514,25 +514,25 @@ impl Font {
     }
 }
 
-macro_rules! impl_shared_draw_entities {
-    ($obj:expr, $( $class:ty ),*) => {{
-        $(
-            match $obj.extract::<$class>() {
-                Ok(r) => return Ok(Self(r.inner, PhantomData)),
-                Err(_) => ()
-            }
-        )*
+// macro_rules! impl_shared_draw_entities {
+//     ($obj:expr, $( $class:ty ),*) => {{
+//         $(
+//             match $obj.extract::<$class>() {
+//                 Ok(r) => return Ok(Self(r.inner, PhantomData)),
+//                 Err(_) => ()
+//             }
+//         )*
 
-        Err(PyRuntimeError::new_err(
-            "Invalid argument for draw".to_string(),
-        ))
-    }};
-}
+//         Err(PyRuntimeError::new_err(
+//             "Invalid argument for draw".to_string(),
+//         ))
+//     }};
+// }
 
-pub struct SharedDrawEntity<'a>(pub Arc<RwLock<dyn Draw<Dynamic>>>, PhantomData<&'a ()>);
+// pub struct SharedDrawEntity<'a>(pub Arc<RwLock<dyn Draw<Dynamic>>>, PhantomData<&'a ()>);
 
-impl<'a> FromPyObject<'a> for SharedDrawEntity<'a> {
-    fn extract(obj: &'a PyAny) -> PyResult<Self> {
-        impl_shared_draw_entities!(obj, TextLayout)
-    }
-}
+// impl<'a> FromPyObject<'a> for SharedDrawEntity<'a> {
+//     fn extract(obj: &'a PyAny) -> PyResult<Self> {
+//         impl_shared_draw_entities!(obj, TextLayout)
+//     }
+// }
