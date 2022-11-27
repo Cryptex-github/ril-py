@@ -26,11 +26,11 @@ By the first stable release, we plan to support the following image encodings:
 
 There will be prebuilt wheels for these platforms:
 
-* Linux x86-64: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
-* MacOS x86-64: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
-* Windows x86-64: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
-* Linux i686: Cpython 3.7, 3.8, 3.9, 3.10, PyPy 3.7, 3.8, 3.9
-* MacOS aarch64: Cpython 3.8, 3.9, 3.10
+* Linux x86-64: Cpython 3.7+, PyPy 3.7, 3.8, 3.9
+* MacOS x86-64: Cpython 3.7+, PyPy 3.7, 3.8, 3.9
+* Windows x86-64: Cpython 3.7+, PyPy 3.7, 3.8, 3.9
+* Linux i686: Cpython 3.7+, PyPy 3.7, 3.8, 3.9
+* MacOS aarch64: Cpython 3.8+
 
 If you want another platform to have prebuilt wheels, please open an issue.
 

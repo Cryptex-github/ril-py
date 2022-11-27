@@ -16,6 +16,6 @@ name = "ril"
 crate-type = ["cdylib"]
 
 [dependencies]
-ril = { version = "0.7", features = ["all-pure"] }
+ril = { git = "https://github.com/jay3332/ril", features = ["all-pure"] }
 pyo3 = { version = "0.17", features = ["extension-module", "abi3-py37"] }
 fontdue = { version = "0.7" }
