@@ -69,9 +69,15 @@ jobs:
 
     - name: Get pip cache dir
       id: pip-cache
+      if: matrix.os != 'windows'
       run: |
         echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
-        "dir=$(pip cache dir)" >> $env:GITHUB_OUTPUT || true
+    
+    - name: Get pip cache dir
+      id: pip-cache
+      if: matrix.os == 'windows'
+      run: |
+        "dir=$(pip cache dir)" >> $env:GITHUB_OUTPUT
     
     - name: Cache python dependencies
       uses: actions/cache@v3
