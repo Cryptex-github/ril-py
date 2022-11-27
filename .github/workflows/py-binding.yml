@@ -21,12 +21,12 @@ jobs:
             platform: linux
           - os: windows
             ls: dir
+            arch: alt
+            alt_arch_name: 'arm64'
           - os: macos
             arch: alt
             alt_arch_name: 'arm64 universal2'
         exclude:
-          - os: windows
-            arch: alt
           - os: macos
             python-version: 'pp37'
             arch: alt
@@ -34,6 +34,15 @@ jobs:
             python-version: 'pp38'
             arch: alt
           - os: macos
+            python-version: 'pp39'
+            arch: alt
+          - os: windows
+            python-version: 'pp37'
+            arch: alt
+          - os: windows
+            python-version: 'pp38'
+            arch: alt
+          - os: windows
             python-version: 'pp39'
             arch: alt
           - os: ubuntu
@@ -61,10 +70,10 @@ jobs:
     - run: rustup target add aarch64-apple-darwin
       if: matrix.os == 'macos'
 
-    - run: rustup toolchain install stable-i686-pc-windows-msvc
+    - run: rustup toolchain install stable-i686-pc-windows-msvc stable-aarch64-pc-windows-msvc
       if: matrix.os == 'windows'
 
-    - run: rustup target add i686-pc-windows-msvc
+    - run: rustup target add i686-pc-windows-msvc aarch64-pc-windows-msvc
       if: matrix.os == 'windows'
 
     - name: Get pip cache dir
@@ -119,7 +128,7 @@ jobs:
           rustup show
         CIBW_TEST_COMMAND: 'pytest {project}/test'
         CIBW_TEST_REQUIRES: pytest requests
-        CIBW_TEST_SKIP: '*-macosx_arm64 *-macosx_universal2:arm64'
+        CIBW_TEST_SKIP: '*-macosx_arm64 *-macosx_universal2:arm64 *-win_arm64'
         CIBW_BUILD_VERBOSITY: 1
 
     - run: ${{ matrix.ls || 'ls -lh' }} wheelhouse/
