@@ -74,7 +74,7 @@ jobs:
         echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
     
     - name: Get pip cache dir
-      id: pip-cache
+      id: pip-cache-win
       if: matrix.os == 'windows'
       run: |
         "dir=$(pip cache dir)" >> $env:GITHUB_OUTPUT
@@ -82,7 +82,7 @@ jobs:
     - name: Cache python dependencies
       uses: actions/cache@v3
       with:
-        path: ${{ steps.pip-cache.outputs.dir }}
+        path: ${{ steps.pip-cache.outputs.dir || steps.pip-cache-win.outputs.dir }}
         key: ${{ runner.os }}-pip-${{ matrix.python-version }}
 
     - name: install python dependencies
