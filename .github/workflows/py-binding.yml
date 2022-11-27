@@ -79,7 +79,7 @@ jobs:
     - name: Get pip cache dir
       id: pip-cache
       run: |
-        echo "dir = $(pip cache dir)" >> $GITHUB_OUTPUT
+        echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
     
     - name: Cache python dependencies
       uses: actions/cache@v3
@@ -97,7 +97,7 @@ jobs:
         import os
 
         with open(os.getenv('GITHUB_OUTPUT'), 'w') as f:
-          f.write(f"dir = {str(user_cache_path(appname='cibuildwheel', appauthor='pypa'))}")
+          f.write(f"dir={str(user_cache_path(appname='cibuildwheel', appauthor='pypa'))}")
       shell: python
 
     - name: Cache cibuildwheel tools
