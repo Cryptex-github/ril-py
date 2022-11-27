@@ -16,7 +16,7 @@ By the first stable release, we plan to support the following image encodings:
 | PNG / APNG      |     Supported      |
 | JPEG            |     Supported      |
 | GIF             |     Supported      |
-| WebP            | Not yet supported  |
+| WebP            | Can't support [(#8)](https://github.com/Cryptex-github/ril-py/issues/8) |
 | BMP             | Not yet supported  |
 | TIFF            | Not yet supported  |
 
