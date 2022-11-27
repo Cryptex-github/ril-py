@@ -80,6 +80,7 @@ jobs:
       id: pip-cache
       run: |
         echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
+        "dir=$(pip cache dir)" >> $env:GITHUB_OUTPUT || true
     
     - name: Cache python dependencies
       uses: actions/cache@v3
